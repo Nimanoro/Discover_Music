@@ -6,6 +6,7 @@ export default function Create() {
    name: "",
    position: "",
    level: "",
+   
  });
  const navigate = useNavigate();
  
@@ -23,7 +24,7 @@ export default function Create() {
    // When a post request is sent to the create url, we'll add a new record to the database.
    const newPerson = { ...form };
  
-   await fetch("http://localhost:2400/record/add", {
+   await fetch("http://localhost:2800/record/add", {
      method: "POST",
      headers: {
        "Content-Type": "application/json",
@@ -55,51 +56,31 @@ export default function Create() {
          />
        </div>
        <div className="form-group">
-         <label htmlFor="position">Position</label>
-         <input
-           type="text"
-           className="form-control"
-           id="position"
-           value={form.position}
-           onChange={(e) => updateForm({ position: e.target.value })}
-         />
-       </div>
-       <div className="form-group">
          <div className="form-check form-check-inline">
            <input
              className="form-check-input"
              type="radio"
              name="positionOptions"
-             id="positionIntern"
-             value="Intern"
-             checked={form.level === "Intern"}
+             id="positionTutor"
+             value="Tutor"
+             checked={form.level === "Tutor"}
              onChange={(e) => updateForm({ level: e.target.value })}
            />
-           <label htmlFor="positionIntern" className="form-check-label">Intern</label>
+           <label htmlFor="positionTutorn" className="form-check-label">Tutor</label>
          </div>
          <div className="form-check form-check-inline">
            <input
              className="form-check-input"
              type="radio"
              name="positionOptions"
-             id="positionJunior"
-             value="Junior"
-             checked={form.level === "Junior"}
+             id="positionStudent"
+             value="Student"
+             checked={form.level === "Student"}
              onChange={(e) => updateForm({ level: e.target.value })}
+             
            />
-           <label htmlFor="positionJunior" className="form-check-label">Junior</label>
-         </div>
-         <div className="form-check form-check-inline">
-           <input
-             className="form-check-input"
-             type="radio"
-             name="positionOptions"
-             id="positionSenior"
-             value="Senior"
-             checked={form.level === "Senior"}
-             onChange={(e) => updateForm({ level: e.target.value })}
-           />
-           <label htmlFor="positionSenior" className="form-check-label">Senior</label>
+          <label htmlFor="positionStudent" className="form-check-label">Student</label>
+
          </div>
        </div>
        <div className="form-group">
