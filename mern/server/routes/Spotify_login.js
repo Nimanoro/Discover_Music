@@ -182,7 +182,6 @@ router.get('/callback', async (req, res) => {
         console.log('User Profile Inserted:', userDoc);
       }
 
-
       // Get audio features for recently played tracks
       const trackIds = recentlyPlayed.items.map(item => item.track.id);
       const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
@@ -197,6 +196,7 @@ router.get('/callback', async (req, res) => {
 
       // Use a session or token to manage the login state
       req.session.user = userDoc;
+      req.session.access_token = access_token;
 
       // Redirect to the user profile page on the frontend
       res.redirect(`http://localhost:3001/user`);
@@ -205,6 +205,28 @@ router.get('/callback', async (req, res) => {
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
     }
   });
+});
+
+router.get('/api/user', async (req, res) => {
+  const db_connect = dbo.getDb();
+  const usersCollection = db_connect.collection('users');
+
+  // Assuming user information is stored in the session
+  const userId = req.session.user && req.session.user.id;
+  if (!userId) {
+    return res.status(401).send('User not logged in');
+  }
+
+  try {
+    const user = await usersCollection.findOne({ id: userId });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).send('Failed to fetch user data');
+  }
 });
 
 module.exports = router;

@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const User = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const queryParams = new URLSearchParams(location.search);
-
       try {
-        const response = await fetch(`http://localhost:2800/api/user`, {
+        const response = await fetch('http://localhost:2800/api/user', {
           credentials: 'include' // Ensure cookies are included in the request
         });
         if (!response.ok) {
@@ -20,6 +16,7 @@ const User = () => {
           throw new Error(`Failed to fetch user data: ${errorText}`);
         }
         const data = await response.json();
+        console.log("Fetched user profile data: ", data);
         setUserProfile(data);
       } catch (error) {
         setError(error.message);
@@ -29,7 +26,7 @@ const User = () => {
     };
 
     fetchUserProfile();
-  }, [location.search]);
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -54,12 +51,6 @@ const User = () => {
               <li key={index}>
                 {item.track.name} by {item.track.artists.map(artist => artist.name).join(', ')}
               </li>
-            ))}
-          </ul>
-          <h3>Audio Feature Averages:</h3>
-          <ul>
-            {userProfile.audioFeaturesAverages && Object.entries(userProfile.audioFeaturesAverages).map(([key, value]) => (
-              <li key={key}>{key}: {value.toFixed(2)}</li>
             ))}
           </ul>
         </div>
