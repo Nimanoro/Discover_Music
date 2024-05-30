@@ -11,19 +11,7 @@ const First = () => {
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
   const [writtenAnswer, setWrittenAnswer] = useState('');
-  const [averages, setAverages] = useState({
-    danceability: 0.75865,
-    energy: 0.5679000000000001,
-    key: 5.1,
-    loudness: -6.8530500000000005,
-    mode: 0.4,
-    speechiness: 0.18487,
-    acousticness: 0.23434135000000006,
-    instrumentalness: 0.012120876,
-    liveness: 0.21146000000000004,
-    valence: 0.429,
-    tempo: 123.76
-  });
+  const [averages, setAverages] = useState(null); // Initially null
   const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
@@ -38,6 +26,25 @@ const First = () => {
         }
         const data = await response.json();
         setUserProfile(data);
+
+        // Set audio features averages
+        if (data.audioFeaturesAverages) {
+          setAverages(data.audioFeaturesAverages);
+        } else {
+          setAverages({
+            danceability: 0.75865,
+            energy: 0.5679000000000001,
+            key: 5.1,
+            loudness: -6.8530500000000005,
+            mode: 0.4,
+            speechiness: 0.18487,
+            acousticness: 0.23434135000000006,
+            instrumentalness: 0.012120876,
+            liveness: 0.21146000000000004,
+            valence: 0.429,
+            tempo: 123.76
+          });
+        }
       } catch (error) {
         setError(error.message);
       } finally {
@@ -109,6 +116,7 @@ const First = () => {
     } else if (userResponses.activity === 'Relaxing') {
       newAverages.energy -= 0.1;
       newAverages.tempo -= 5;
+
       newAverages.acousticness += 0.1;
     }
 
@@ -117,13 +125,9 @@ const First = () => {
     } else if (userResponses.environment === 'noisy') {
       newAverages.liveness += 0.1;
     }
-
-    Object.keys(newAverages).forEach(key => {
-      if (typeof newAverages[key] === 'number') {
-        newAverages[key] = Math.max(0, Math.min(1, newAverages[key]));
-      }
-    });
-
+    newAverages.tempo = Math.round(newAverages.tempo);
+    newAverages.key = Math.round(newAverages.key);
+    newAverages.mode = Math.round(newAverages.mode);
     setAverages(newAverages);
 
     getRecommendations(newAverages);
@@ -136,7 +140,8 @@ const First = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ adjustedAverages })
+        body: JSON.stringify({ adjustedAverages }),
+        credentials: 'include'
       });
       if (!response.ok) {
         throw new Error('Failed to fetch recommendations');

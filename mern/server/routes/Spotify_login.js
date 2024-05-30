@@ -23,7 +23,7 @@ const fetchAudioFeatures = async (accessToken, trackIds) => {
   }
 
   const data = await response.json();
-  console.log('Audio Features Response:', data);
+  //console.log('Audio Features Response:', data);
   return data.audio_features; // Ensure this is an array
 };
 
@@ -106,7 +106,7 @@ router.get('/callback', async (req, res) => {
       return res.status(500).send('Failed to authenticate with Spotify');
     }
 
-    console.log('Received body:', body);
+    //console.log('Received body:', body);
 
     const access_token = body.access_token;
     const refresh_token = body.refresh_token;
@@ -114,8 +114,11 @@ router.get('/callback', async (req, res) => {
     const db_connect = dbo.getDb();
 
     console.log('Access Token:', access_token);
-    console.log('Refresh Token:', refresh_token);
-    console.log('Expires In:', expires_in);
+    req.session.access_token = access_token;
+    console.log('access_token:', req.session.access_token);
+
+    //console.log('Refresh Token:', refresh_token);
+    //console.log('Expires In:', expires_in);
 
     try {
       // Fetch user profile data
@@ -124,10 +127,10 @@ router.get('/callback', async (req, res) => {
       });
 
       const userProfileText = await userProfileResponse.text();
-      console.log('User Profile Response:', userProfileText);
+      //console.log('User Profile Response:', userProfileText);
 
       if (!userProfileResponse.ok) {
-        console.error('Error fetching user profile:', userProfileText);
+        //console.error('Error fetching user profile:', userProfileText);
         return res.status(500).send(`Failed to fetch user profile: ${userProfileText}`);
       }
 
@@ -135,11 +138,11 @@ router.get('/callback', async (req, res) => {
       try {
         userProfile = JSON.parse(userProfileText);
       } catch (jsonError) {
-        console.error('Error parsing JSON:', jsonError);
+        //console.error('Error parsing JSON:', jsonError);
         return res.status(500).send('Failed to parse user profile data');
       }
 
-      console.log('User Profile:', userProfile);
+      //console.log('User Profile:', userProfile);
 
       // Fetch recently played tracks
       const recentlyPlayedResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
@@ -147,10 +150,10 @@ router.get('/callback', async (req, res) => {
       });
 
       const recentlyPlayedText = await recentlyPlayedResponse.text();
-      console.log('Recently Played Response:', recentlyPlayedText);
+      //console.log('Recently Played Response:', recentlyPlayedText);
 
       if (!recentlyPlayedResponse.ok) {
-        console.error('Error fetching recently played tracks:', recentlyPlayedText);
+        //console.error('Error fetching recently played tracks:', recentlyPlayedText);
         return res.status(500).send(`Failed to fetch recently played tracks: ${recentlyPlayedText}`);
       }
 
@@ -158,11 +161,11 @@ router.get('/callback', async (req, res) => {
       try {
         recentlyPlayed = JSON.parse(recentlyPlayedText);
       } catch (jsonError) {
-        console.error('Error parsing JSON:', jsonError);
+        //console.error('Error parsing JSON:', jsonError);
         return res.status(500).send('Failed to parse recently played tracks data');
       }
 
-      console.log('Recently Played:', recentlyPlayed);
+      //console.log('Recently Played:', recentlyPlayed);
 
       // Save user profile and recently played tracks to MongoDB
       const usersCollection = db_connect.collection('users');
@@ -175,33 +178,34 @@ router.get('/callback', async (req, res) => {
       if (existingUser) {
         // Update existing user profile
         await usersCollection.updateOne({ id: userProfile.id }, { $set: userDoc });
-        console.log('User Profile Updated:', userDoc);
+        //console.log('User Profile Updated:', userDoc);
       } else {
         // Insert new user profile
         await usersCollection.insertOne(userDoc);
-        console.log('User Profile Inserted:', userDoc);
+        //console.log('User Profile Inserted:', userDoc);
       }
 
       // Get audio features for recently played tracks
       const trackIds = recentlyPlayed.items.map(item => item.track.id);
       const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
-      console.log('Audio Features:', audioFeatures);
+      //console.log('Audio Features:', audioFeatures);
+      req.session.audioFeatures = audioFeatures;
 
       // Calculate averages
       const averages = calculateAverages(audioFeatures);
-      console.log('Averages:', averages);
+      //console.log('Averages:', averages);
 
       // Save averages to database
       await saveAveragesToUser(userProfile.id, averages);
 
       // Use a session or token to manage the login state
       req.session.user = userDoc;
-      req.session.access_token = access_token;
+      
 
       // Redirect to the user profile page on the frontend
       res.redirect(`http://localhost:3001/user`);
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      //console.error('Database error:', dbError);
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
     }
   });

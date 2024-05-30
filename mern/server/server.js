@@ -2,13 +2,16 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 const path = require("path");
+const bodyParser = require('body-parser');
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 2800;
 const spotifyLogin = require("./routes/Spotify_login");
-const spotifyrecommendations = require("./routes/Spotify_reccomendations")
+const recommendationsRouter = require('./routes/Spotify_reccomendations')
 const dbo = require("./db/conn");
 
 const app = express();
+app.use(bodyParser.json());
+
 
 app.use(session({
   secret: 'your_secret_key',
@@ -25,7 +28,7 @@ app.use(express.json());
 
 app.use('/spotify', spotifyLogin);
 
-app.use('/spotify', spotifyrecommendations); // Add this line
+app.use(recommendationsRouter);
 
 
 // Serve static files from the React app

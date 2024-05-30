@@ -5,11 +5,13 @@ const dbo = require('../db/conn');
 
 console.log("spotify_recommendations.js loaded");
 
+// Function to validate averages
 // Endpoint to get recommendations
 router.post('/api/recommendations', async (req, res) => {
   console.log('Received request for recommendations');
   const { adjustedAverages } = req.body;
-  console.log('Adjusted Averages:', adjustedAverages);
+  //console.log('Adjusted Averages:', adjustedAverages);
+
 
   const accessToken = req.session.access_token;
   console.log('Access Token:', accessToken);
@@ -20,7 +22,13 @@ router.post('/api/recommendations', async (req, res) => {
   }
 
   try {
-    const response = await fetch(`https://api.spotify.com/v1/recommendations?limit=30&target_danceability=${adjustedAverages.danceability}&target_energy=${adjustedAverages.energy}&target_key=${adjustedAverages.key}&target_loudness=${adjustedAverages.loudness}&target_mode=${adjustedAverages.mode}&target_speechiness=${adjustedAverages.speechiness}&target_acousticness=${adjustedAverages.acousticness}&target_instrumentalness=${adjustedAverages.instrumentalness}&target_liveness=${adjustedAverages.liveness}&target_valence=${adjustedAverages.valence}&target_tempo=${adjustedAverages.tempo}`, {
+    const url = `https://api.spotify.com/v1/recommendations?limit=30&seed_genres=hip-hop&target_danceability=${adjustedAverages.danceability}&target_energy=${adjustedAverages.energy}&target_key=${adjustedAverages.key}&target_loudness=${adjustedAverages.loudness}&target_mode=${adjustedAverages.mode}&target_speechiness=${adjustedAverages.speechiness}&target_acousticness=${adjustedAverages.acousticness}&target_instrumentalness=${adjustedAverages.instrumentalness}&target_liveness=${adjustedAverages.liveness}&target_valence=${adjustedAverages.valence}&target_tempo=${adjustedAverages.tempo}`;
+
+    console.log('Request URL:', url);
+    console.log('Access Token:', accessToken);
+    console.log(url)
+
+    const response = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
@@ -33,7 +41,7 @@ router.post('/api/recommendations', async (req, res) => {
     }
 
     const data = await response.json();
-    console.log('Fetched recommendations:', data);
+    //console.log('Fetched recommendations:', data);
     res.json(data.tracks);
   } catch (error) {
     console.error('Error fetching recommendations:', error);
