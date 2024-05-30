@@ -1,0 +1,50 @@
+.navbar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: sticky;
+	top: 0;
+	cursor: pointer;
+}
+
+.nav-list {
+	width: 75%;
+	display: flex;
+	align-items: center;
+}
+
+@media (max-width: 600px) {
+	.nav-list {
+	  width: 100%;
+	  display: flex;
+	  align-items: center;
+	}
+}
+.nav-list li {
+	list-style: none;
+	padding: 26px 30px;
+	color: rgb(255, 255, 255);
+}
+
+@media (max-width: 600px) {
+	.nav-list li {
+		list-style: none;
+		display: flex;
+	 	align-items: center;
+		padding: 16px 20px;
+		color: rgb(255, 255, 255);
+	}
+}
+.nav-list li a {
+	text-decoration: none;
+	color: rgb(9, 109, 5);
+}
+
+.nav-list li a:hover {
+	color: rgb(80, 254, 5);
+}
+
+.rightnav {
+	width: 30%;
+	text-align: right;
+}
