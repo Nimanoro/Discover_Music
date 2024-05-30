@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,8 +13,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongodb": "^6.5.0",
+    "express-session": "^1.18.0",
+    "mongodb": "^6.6.2",
     "mongoose": "^8.2.3",
-    "nodemon": "^3.1.0"
+    "node-fetch": "^2.7.0",
+    "nodemon": "^3.1.0",
+    "querystring": "^0.2.1",
+    "request": "^2.88.2"
   }
 }

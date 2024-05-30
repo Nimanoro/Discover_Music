@@ -13,7 +13,7 @@ module.exports = {
       console.error(e);
     }
 
-    _db = client.db("employees");
+    _db = client.db("users");
 
     return (_db === undefined ? false : true);
   },

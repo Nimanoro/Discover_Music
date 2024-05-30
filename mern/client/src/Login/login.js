@@ -1,26 +1,17 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-}
+import React from 'react';
 
 const Login = () => {
-  const query = useQuery();
-  const accessToken = query.get('access_token');
+  const scope = 'user-read-recently-played user-read-private user-read-email';
+  const clientId = 'c45598b6ed004b3691abf893c3194eed';
+  const redirectUri = 'http://localhost:2800/spotify/callback'; // Ensure this matches your server port
 
-  useEffect(() => {
-    if (accessToken) {
-      // Store token and use it for API requests
-      localStorage.setItem('spotify_access_token', accessToken);
-    }
-  }, [accessToken]);
+  const loginWithSpotify = () => {
+    window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
+  };
 
   return (
-    <div>
-      <a href="http://localhost:8888/login">Login with Spotify</a>
-    </div>
+    <button onClick={loginWithSpotify}>Login with Spotify</button>
   );
-}
+};
 
 export default Login;
