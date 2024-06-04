@@ -27,10 +27,11 @@ const First = () => {
         const data = await response.json();
         setUserProfile(data);
 
-        // Set audio features averages
+        // Set audio features aversges
         if (data.audioFeaturesAverages) {
           setAverages(data.audioFeaturesAverages);
         } else {
+          setError('User profile does not have audio features averages');
           setAverages({
             danceability: 0.75865,
             energy: 0.5679000000000001,
@@ -130,17 +131,18 @@ const First = () => {
     newAverages.mode = Math.round(newAverages.mode);
     setAverages(newAverages);
 
-    getRecommendations(newAverages);
+    getRecommendations(newAverages, userResponses.song);
   };
 
-  const getRecommendations = async (adjustedAverages) => {
+  const getRecommendations = async (adjustedAverages, song) => {
     try {
       const response = await fetch('http://localhost:2800/api/recommendations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ adjustedAverages }),
+        body: JSON.stringify({ adjustedAverages, song }),
+
         credentials: 'include'
       });
       if (!response.ok) {
@@ -218,11 +220,19 @@ const First = () => {
           </div>
         ) : (
           <div className="result">
+            <h3>Playlist Created!</h3>
+            <ul>
+              you can access it here: <a href="https://open.spotify.com/collection/playlists/">Spotify</a>
+            </ul>
             <h3>Recommended Tracks</h3>
             <ul>
               {recommendations.map((track) => (
                 <li key={track.id}>
-                  <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                  {track.album && track.album.images && track.album.images.length > 0 ? (
+                    <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                  ) : (
+                    <img src="default_image_url" alt="Default" width="50" height="50" />
+                  )}
                   <p>{track.name} by {track.artists.map(artist => artist.name).join(', ')}</p>
                 </li>
               ))}

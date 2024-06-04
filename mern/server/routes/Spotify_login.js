@@ -10,6 +10,8 @@ const redirect_uri = 'http://localhost:2800/spotify/callback'; // Ensure this ma
 
 console.log("Spotify_login.js loaded");
 
+
+
 const fetchAudioFeatures = async (accessToken, trackIds) => {
   const response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds.join(',')}`, {
     headers: {
@@ -21,11 +23,30 @@ const fetchAudioFeatures = async (accessToken, trackIds) => {
     const errorText = await response.text();
     throw new Error(`Failed to fetch audio features: ${errorText}`);
   }
+  
 
   const data = await response.json();
   //console.log('Audio Features Response:', data);
   return data.audio_features; // Ensure this is an array
 };
+
+
+  // const fetchTopTracks= async (accessToken) => {
+  //   const response = await fetch(`https://api.spotify.com/v1/me/top/tracks`, {
+  //     headers: {
+  //       'Authorization': `Bearer ${accessToken}`
+  //     }
+  //   });
+  //   if (!response.ok) {
+  //     const errorText = await response.text();
+  //     throw new Error(`Failed to fetch audio features: ${errorText}`);
+  //   }
+    
+  
+  //   const data = await response.json();
+  //   //console.log('Audio Features Response:', data);
+  //   return data; // Ensure this is an array
+  // };
 
 const calculateAverages = (audioFeatures) => {
   if (!Array.isArray(audioFeatures)) {
@@ -67,16 +88,6 @@ const calculateAverages = (audioFeatures) => {
 
   return averages;
 };
-
-const saveAveragesToUser = async (userId, averages) => {
-  const db_connect = dbo.getDb();
-  const usersCollection = db_connect.collection('users');
-  await usersCollection.updateOne(
-    { id: userId },
-    { $set: { audioFeaturesAverages: averages } }
-  );
-};
-
 router.get('/callback', async (req, res) => {
   console.log("Callback received");
   const code = req.query.code || null;
@@ -166,13 +177,36 @@ router.get('/callback', async (req, res) => {
       }
 
       //console.log('Recently Played:', recentlyPlayed);
+      const trackIds = recentlyPlayed.items.map(item => item.track.id);
+      console.log('Track IDs:', trackIds);
+      const trackGenres = recentlyPlayed.items.map(item => item.track.artists.genres);
+      console.log('Track Genres:', trackGenres);
+      const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
+      //console.log('Audio Features:', audioFeatures);
+      // const topGenre = await fetchTopTracks(access_token);
+      // console.log('Top Genre:', topGenre);
+      // req.session.topGenre = topGenre;
+      req.session.audioFeatures = audioFeatures;
+      console.log(userProfile.id);
+      req.session.userID = userProfile.id;
+      console.log(req.session.userID);
+      
 
+
+      // Calculate averages
+      const averages = calculateAverages(audioFeatures);
+      //console.log('Averages:', averages);
+      // Use a session or token to manage the login state
       // Save user profile and recently played tracks to MongoDB
       const usersCollection = db_connect.collection('users');
       const userDoc = {
         ...userProfile,
-        recentlyPlayed: recentlyPlayed.items
+        recentlyPlayed: recentlyPlayed.items,
+        audioFeaturesAverages: averages
+
       };
+      req.session.user = userDoc;
+
       const existingUser = await usersCollection.findOne({ id: userProfile.id });
 
       if (existingUser) {
@@ -186,20 +220,7 @@ router.get('/callback', async (req, res) => {
       }
 
       // Get audio features for recently played tracks
-      const trackIds = recentlyPlayed.items.map(item => item.track.id);
-      const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
-      //console.log('Audio Features:', audioFeatures);
-      req.session.audioFeatures = audioFeatures;
-
-      // Calculate averages
-      const averages = calculateAverages(audioFeatures);
-      //console.log('Averages:', averages);
-
-      // Save averages to database
-      await saveAveragesToUser(userProfile.id, averages);
-
-      // Use a session or token to manage the login state
-      req.session.user = userDoc;
+     
       
 
       // Redirect to the user profile page on the frontend

@@ -43,9 +43,57 @@ router.post('/api/recommendations', async (req, res) => {
     const data = await response.json();
     //console.log('Fetched recommendations:', data);
     res.json(data.tracks);
+    //console.log(data.tracks)
+    // Create a new playlist for the user
+    const userId = req.session.userID ;
+    const createPlaylistResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: 'Discover Music 3 June',
+        description: 'Playlist generated based on your quiz responses',
+        public: false
+      })
+    });
+
+    if (!createPlaylistResponse.ok) {
+      const errorText = await createPlaylistResponse.text();
+      console.error('Error creating playlist:', errorText);
+      throw new Error(`Failed to create playlist: ${errorText}`);
+    }
+    recommendedTracks = data.tracks.map(track => track.uri);
+
+    const playlistData = await createPlaylistResponse.json();
+    const playlistId = playlistData.id;
+    req.session.playlist_id = playlistId;
+    console.log('Created Playlist ID:', playlistId);
+
+    // Add tracks to the newly created playlist
+    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        uris: recommendedTracks
+      })
+    });
+
+    if (!addTracksResponse.ok) {
+      const errorText = await addTracksResponse.text();
+      console.error('Error adding tracks to playlist:', errorText);
+      throw new Error(`Failed to add tracks to playlist: ${errorText}`);
+    }
+
+    console.log('Tracks added to playlist');
+
   } catch (error) {
-    console.error('Error fetching recommendations:', error);
-    res.status(500).send(`Failed to fetch recommendations: ${error.message}`);
+    console.error('Error:', error);
+    res.status(500).send(`Failed to create playlist and add tracks: ${error.message}`);
   }
 });
 
