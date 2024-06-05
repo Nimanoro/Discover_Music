@@ -10,9 +10,13 @@ const First = () => {
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
+  const [selectedAnswerIndexes, setSelectedAnswerIndexes] = useState([]);
   const [writtenAnswer, setWrittenAnswer] = useState('');
-  const [averages, setAverages] = useState(null); // Initially null
+  const [averages, setAverages] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [playlistDetails, setPlaylistDetails] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -27,24 +31,10 @@ const First = () => {
         const data = await response.json();
         setUserProfile(data);
 
-        // Set audio features aversges
         if (data.audioFeaturesAverages) {
           setAverages(data.audioFeaturesAverages);
         } else {
           setError('User profile does not have audio features averages');
-          setAverages({
-            danceability: 0.75865,
-            energy: 0.5679000000000001,
-            key: 5.1,
-            loudness: -6.8530500000000005,
-            mode: 0.4,
-            speechiness: 0.18487,
-            acousticness: 0.23434135000000006,
-            instrumentalness: 0.012120876,
-            liveness: 0.21146000000000004,
-            valence: 0.429,
-            tempo: 123.76
-          });
         }
       } catch (error) {
         setError(error.message);
@@ -86,6 +76,7 @@ const First = () => {
 
   const onAnswerSelected = (answer, index) => {
     setSelectedAnswerIndex(index);
+    setSelectedAnswerIndexes([...selectedAnswerIndexes, index]);
     if (answer === correctAnswer) {
       setSelectedAnswer(true);
     } else {
@@ -93,63 +84,145 @@ const First = () => {
     }
   };
 
+
+  const searchTracks = async () => {
+    try {
+      const response = await fetch(`http://localhost:2800/api/search-tracks?query=${encodeURIComponent(writtenAnswer)}`, {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to search tracks');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const selectTrack = (track) => {
+    setSelectedTrack(track);
+    setSearchResults([]);
+    setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
+  };
+  const user_mood = { mood: '', activity: '', song: '', environment: ''};
   const adjustAverages = () => {
     const userResponses = {
-      mood: questions[0].choices[selectedAnswerIndex],
-      activity: questions[1].choices[selectedAnswerIndex],
-      song: writtenAnswer,
-      environment: questions[3].choices[selectedAnswerIndex]
+      premium: questions[0].choices[selectedAnswerIndexes[0]],
+      mood: questions[1].choices[selectedAnswerIndexes[1]],
+      activity: questions[2].choices[selectedAnswerIndexes[2]],
+      song: selectedTrack ? selectedTrack.id : writtenAnswer,
+      environment: questions[4].choices[selectedAnswerIndexes[3]]
     };
+    console.log(userResponses);
+
 
     let newAverages = { ...averages };
 
     if (userResponses.mood === 'Energetic') {
+      user_mood.mood = 'Energetic';
       newAverages.energy += 0.1;
       newAverages.tempo += 5;
     } else if (userResponses.mood === 'Calm') {
       newAverages.energy -= 0.1;
       newAverages.tempo -= 5;
+      user_mood.mood = 'calm';
+    } else if (userResponses.mood === 'Happy') {
+      newAverages.valence += 0.1;
+      user_mood.mood = 'Happy';
+    } else if (userResponses.mood === 'Sad') {
+      newAverages.valence -= 0.1;
+      user_mood.mood = 'Sad';
+    } else if (userResponses.mood=== 'Stressed') {
+      newAverages.energy -= 0.3;
+      newAverages.tempo -= 10;
+      user_mood.mood = 'Stressed';
     }
+    
 
     if (userResponses.activity === 'Exercising') {
       newAverages.energy += 0.1;
       newAverages.tempo += 10;
+      user_mood.activity = 'Exercising';
+
     } else if (userResponses.activity === 'Relaxing') {
       newAverages.energy -= 0.1;
       newAverages.tempo -= 5;
-
       newAverages.acousticness += 0.1;
-    }
+      user_mood.activity = 'Relaxing';
+    } else if (userResponses.activity === 'Working') {
+      newAverages.energy += 0.1;
+      newAverages.tempo += 5;
+      user_mood.activity = 'Working';
+    } else if (userResponses.activity === 'Commuting') {
+      newAverages.energy += 0.2;
+      newAverages.tempo -= 5;
+      user_mood.activity = 'Commuting';
+    } 
 
-    if (userResponses.environment === 'quiet') {
+    if (userResponses.environment === 'Quiet') {
       newAverages.liveness -= 0.1;
-    } else if (userResponses.environment === 'noisy') {
+      user_mood.environment = 'Quiet';
+    } else if (userResponses.environment === 'Noisy') {
       newAverages.liveness += 0.1;
+      user_mood.environment = 'Noisy';
     }
     newAverages.tempo = Math.round(newAverages.tempo);
     newAverages.key = Math.round(newAverages.key);
     newAverages.mode = Math.round(newAverages.mode);
     setAverages(newAverages);
-
-    getRecommendations(newAverages, userResponses.song);
+    if (userResponses.premium === 'Yes') {
+      getRecommendationsPrem(newAverages);
+    } else {
+    getRecommendations(newAverages);
+    }
   };
 
-  const getRecommendations = async (adjustedAverages, song) => {
+  const getRecommendations = async (adjustedAverages) => {
     try {
       const response = await fetch('http://localhost:2800/api/recommendations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ adjustedAverages, song }),
-
+        body: JSON.stringify({ adjustedAverages, seedTrack: selectedTrack ? selectedTrack.id : null , user_mood: user_mood}),
         credentials: 'include'
       });
       if (!response.ok) {
         throw new Error('Failed to fetch recommendations');
       }
       const data = await response.json();
-      setRecommendations(data);
+      setRecommendations(data.tracks);
+      setPlaylistDetails({
+        name: data.playlistName,
+        image: data.playlistImage,
+        id: data.playlistId
+      });
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getRecommendationsPrem = async (adjustedAverages) => {
+    try {
+      const response = await fetch('http://localhost:2800/api/recommendationsPrem', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ adjustedAverages, seedTrack: selectedTrack ? selectedTrack.id : null , user_mood: user_mood}),
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch recommendations');
+      }
+      const data = await response.json();
+      setRecommendations(data.tracks);
+      setPlaylistDetails({
+        name: data.playlistName,
+        image: data.playlistImage,
+        id: data.playlistId
+      });
     } catch (error) {
       setError(error.message);
     }
@@ -202,12 +275,27 @@ const First = () => {
                 ))}
               </ul>
             ) : (
-              <input
-                type="text"
-                value={writtenAnswer}
-                onChange={(e) => setWrittenAnswer(e.target.value)}
-                placeholder="Type your answer here"
-              />
+              <div>
+                <input
+                  type="text"
+                  value={writtenAnswer}
+                  onChange={(e) => setWrittenAnswer(e.target.value)}
+                  placeholder="Type your answer here"
+                />
+                <button onClick={searchTracks}>Search</button>
+                <ul>
+                  {searchResults.map((track) => (
+                    <li key={track.id} onClick={() => selectTrack(track)}>
+                      {track.album && track.album.images && track.album.images.length > 0 ? (
+                        <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                      ) : (
+                        <img src="default_image_url" alt="Default" width="50" height="50" />
+                      )}
+                      {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
             <div className="flex-right">
               <button onClick={onClickSkip}>
@@ -219,11 +307,18 @@ const First = () => {
             </div>
           </div>
         ) : (
+  
           <div className="result">
-            <h3>Playlist Created!</h3>
-            <ul>
-              you can access it here: <a href="https://open.spotify.com/collection/playlists/">Spotify</a>
-            </ul>
+            {playlistDetails && (
+              <div>
+                <h3>{playlistDetails.name}</h3>
+                <a href={`https://open.spotify.com/playlist/${playlistDetails.id}`} target="_blank" rel="noopener noreferrer">Open Playlist</a>
+
+                {playlistDetails.image && (
+                  <img src={playlistDetails.image} alt={playlistDetails.name} width="200" height="200" />
+                )}
+              </div>
+            )}
             <h3>Recommended Tracks</h3>
             <ul>
               {recommendations.map((track) => (

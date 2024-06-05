@@ -10,8 +10,6 @@ const redirect_uri = 'http://localhost:2800/spotify/callback'; // Ensure this ma
 
 console.log("Spotify_login.js loaded");
 
-
-
 const fetchAudioFeatures = async (accessToken, trackIds) => {
   const response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds.join(',')}`, {
     headers: {
@@ -23,30 +21,10 @@ const fetchAudioFeatures = async (accessToken, trackIds) => {
     const errorText = await response.text();
     throw new Error(`Failed to fetch audio features: ${errorText}`);
   }
-  
 
   const data = await response.json();
-  //console.log('Audio Features Response:', data);
   return data.audio_features; // Ensure this is an array
 };
-
-
-  // const fetchTopTracks= async (accessToken) => {
-  //   const response = await fetch(`https://api.spotify.com/v1/me/top/tracks`, {
-  //     headers: {
-  //       'Authorization': `Bearer ${accessToken}`
-  //     }
-  //   });
-  //   if (!response.ok) {
-  //     const errorText = await response.text();
-  //     throw new Error(`Failed to fetch audio features: ${errorText}`);
-  //   }
-    
-  
-  //   const data = await response.json();
-  //   //console.log('Audio Features Response:', data);
-  //   return data; // Ensure this is an array
-  // };
 
 const calculateAverages = (audioFeatures) => {
   if (!Array.isArray(audioFeatures)) {
@@ -88,8 +66,8 @@ const calculateAverages = (audioFeatures) => {
 
   return averages;
 };
+
 router.get('/callback', async (req, res) => {
-  console.log("Callback received");
   const code = req.query.code || null;
   if (!code) {
     console.log("No authorization code found");
@@ -109,39 +87,25 @@ router.get('/callback', async (req, res) => {
     json: true
   };
 
-  console.log('Auth Options:', authOptions);
-
   request.post(authOptions, async (error, response, body) => {
     if (error || response.statusCode !== 200) {
       console.error('Error fetching access token:', error || body);
       return res.status(500).send('Failed to authenticate with Spotify');
     }
 
-    //console.log('Received body:', body);
-
     const access_token = body.access_token;
-    const refresh_token = body.refresh_token;
-    const expires_in = body.expires_in;
     const db_connect = dbo.getDb();
 
-    console.log('Access Token:', access_token);
     req.session.access_token = access_token;
-    console.log('access_token:', req.session.access_token);
-
-    //console.log('Refresh Token:', refresh_token);
-    //console.log('Expires In:', expires_in);
-
+    
     try {
-      // Fetch user profile data
       const userProfileResponse = await fetch('https://api.spotify.com/v1/me', {
         headers: { 'Authorization': 'Bearer ' + access_token }
       });
 
       const userProfileText = await userProfileResponse.text();
-      //console.log('User Profile Response:', userProfileText);
 
       if (!userProfileResponse.ok) {
-        //console.error('Error fetching user profile:', userProfileText);
         return res.status(500).send(`Failed to fetch user profile: ${userProfileText}`);
       }
 
@@ -149,22 +113,19 @@ router.get('/callback', async (req, res) => {
       try {
         userProfile = JSON.parse(userProfileText);
       } catch (jsonError) {
-        //console.error('Error parsing JSON:', jsonError);
         return res.status(500).send('Failed to parse user profile data');
       }
 
-      //console.log('User Profile:', userProfile);
+      req.session.userID = userProfile.id;
 
-      // Fetch recently played tracks
+
       const recentlyPlayedResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
         headers: { 'Authorization': 'Bearer ' + access_token }
       });
 
       const recentlyPlayedText = await recentlyPlayedResponse.text();
-      //console.log('Recently Played Response:', recentlyPlayedText);
 
       if (!recentlyPlayedResponse.ok) {
-        //console.error('Error fetching recently played tracks:', recentlyPlayedText);
         return res.status(500).send(`Failed to fetch recently played tracks: ${recentlyPlayedText}`);
       }
 
@@ -172,61 +133,42 @@ router.get('/callback', async (req, res) => {
       try {
         recentlyPlayed = JSON.parse(recentlyPlayedText);
       } catch (jsonError) {
-        //console.error('Error parsing JSON:', jsonError);
         return res.status(500).send('Failed to parse recently played tracks data');
       }
 
-      //console.log('Recently Played:', recentlyPlayed);
       const trackIds = recentlyPlayed.items.map(item => item.track.id);
-      console.log('Track IDs:', trackIds);
-      const trackGenres = recentlyPlayed.items.map(item => item.track.artists.genres);
-      console.log('Track Genres:', trackGenres);
       const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
-      //console.log('Audio Features:', audioFeatures);
-      // const topGenre = await fetchTopTracks(access_token);
-      // console.log('Top Genre:', topGenre);
-      // req.session.topGenre = topGenre;
-      req.session.audioFeatures = audioFeatures;
-      console.log(userProfile.id);
-      req.session.userID = userProfile.id;
-      console.log(req.session.userID);
-      
 
-
-      // Calculate averages
       const averages = calculateAverages(audioFeatures);
-      //console.log('Averages:', averages);
-      // Use a session or token to manage the login state
-      // Save user profile and recently played tracks to MongoDB
+
       const usersCollection = db_connect.collection('users');
+      const existingUser = await usersCollection.findOne({ id: userProfile.id });
+
+      let playlists = [];
+      if (existingUser) {
+        playlists = existingUser.playlists || [];
+      }
+
       const userDoc = {
         ...userProfile,
         recentlyPlayed: recentlyPlayed.items,
-        audioFeaturesAverages: averages
-
+        audioFeaturesAverages: averages,
+        playlists: playlists // Use existing playlists if they exist
       };
+
       req.session.user = userDoc;
 
-      const existingUser = await usersCollection.findOne({ id: userProfile.id });
-
       if (existingUser) {
-        // Update existing user profile
         await usersCollection.updateOne({ id: userProfile.id }, { $set: userDoc });
-        //console.log('User Profile Updated:', userDoc);
+        console.log('User Profile Updated:', userDoc);
       } else {
-        // Insert new user profile
         await usersCollection.insertOne(userDoc);
-        //console.log('User Profile Inserted:', userDoc);
+        console.log('User Profile Inserted:', userDoc);
       }
 
-      // Get audio features for recently played tracks
-     
-      
-
-      // Redirect to the user profile page on the frontend
       res.redirect(`http://localhost:3001/user`);
     } catch (dbError) {
-      //console.error('Database error:', dbError);
+      console.error('Database error:', dbError);
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
     }
   });
@@ -236,8 +178,8 @@ router.get('/api/user', async (req, res) => {
   const db_connect = dbo.getDb();
   const usersCollection = db_connect.collection('users');
 
-  // Assuming user information is stored in the session
   const userId = req.session.user && req.session.user.id;
+
   if (!userId) {
     return res.status(401).send('User not logged in');
   }

@@ -8,6 +8,8 @@ const port = process.env.PORT || 2800;
 const spotifyLogin = require("./routes/Spotify_login");
 const recommendationsRouter = require('./routes/Spotify_reccomendations')
 const dbo = require("./db/conn");
+const searchRouter = require('./routes/Search');
+const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,8 +29,10 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/spotify', spotifyLogin);
+app.use(recommendationsPremRouter);
 
 app.use(recommendationsRouter);
+app.use(searchRouter);
 
 
 // Serve static files from the React app

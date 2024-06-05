@@ -1,12 +1,15 @@
 const Questions = {
-  topic: 'Javascript',
-  level: 'Beginner',
-  totalQuestions: 4,
-  perQuestionScore: 5,
+  totalQuestions: 5,
   questions: [
     {
+      question: "Do you want the premium experience?",
+      choices: ['Yes', 'No'],
+      type: 'MCQs',
+      correctAnswer: 'stringify()',
+    },
+    {
       question: "How are you feeling today?",
-      choices: ['Happy', 'Calm', 'Energetic', 'Sad', 'stressed'],
+      choices: ['Happy', 'Calm', 'Energetic', 'Sad', 'Stressed'],
       type: 'MCQs',
       correctAnswer: 'stringify()',
     },
@@ -25,7 +28,7 @@ const Questions = {
     },
     {
       question: "Are you in a quiet or noisy environment?",
-      choices: ['quiet', 'noisy'],
+      choices: ['Quiet', 'Noisy'],
       type: 'MCQs',
       correctAnswer: 'const',
     },
