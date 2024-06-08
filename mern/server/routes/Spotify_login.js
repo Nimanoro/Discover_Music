@@ -119,7 +119,7 @@ router.get('/callback', async (req, res) => {
       req.session.userID = userProfile.id;
 
 
-      const recentlyPlayedResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
+      const recentlyPlayedResponse = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=50', {
         headers: { 'Authorization': 'Bearer ' + access_token }
       });
 
@@ -166,34 +166,12 @@ router.get('/callback', async (req, res) => {
         console.log('User Profile Inserted:', userDoc);
       }
 
-      res.redirect(`http://localhost:3001/user`);
+      res.redirect(`http://localhost:3001/`);
     } catch (dbError) {
       console.error('Database error:', dbError);
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
     }
   });
 });
-
-router.get('/api/user', async (req, res) => {
-  const db_connect = dbo.getDb();
-  const usersCollection = db_connect.collection('users');
-
-  const userId = req.session.user && req.session.user.id;
-
-  if (!userId) {
-    return res.status(401).send('User not logged in');
-  }
-
-  try {
-    const user = await usersCollection.findOne({ id: userId });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
-    res.json(user);
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    res.status(500).send('Failed to fetch user data');
-  }
-});
-
+  
 module.exports = router;

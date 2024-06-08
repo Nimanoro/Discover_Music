@@ -30,11 +30,10 @@ const Navbar = () => {
       <nav className="navbar background h-100% w-100% overflow-x-hidden">
         <ul className="nav-list sm:w-full">
           <li><a href="/">Home</a></li>
-          <li><a href="database">Database</a></li>
           {isLoggedIn ? (
             <>
               <li><a href="my_profile">My Profile</a></li>
-              <li><a href="generate">New playlist</a></li>
+              <li><a href="make_playlist">New playlist</a></li>
 
               <li><a href="#" onClick={() => {
                 // Log out the user

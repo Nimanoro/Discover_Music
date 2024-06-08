@@ -2,12 +2,14 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 const path = require("path");
+const deleteRouter = require('./routes/Deletion');
 const bodyParser = require('body-parser');
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 2800;
 const spotifyLogin = require("./routes/Spotify_login");
 const recommendationsRouter = require('./routes/Spotify_reccomendations')
 const dbo = require("./db/conn");
+const userRouter = require('./routes/User');
 const searchRouter = require('./routes/Search');
 const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
 
@@ -30,6 +32,8 @@ app.use(express.json());
 
 app.use('/spotify', spotifyLogin);
 app.use(recommendationsPremRouter);
+app.use(deleteRouter);
+app.use(userRouter); 
 
 app.use(recommendationsRouter);
 app.use(searchRouter);

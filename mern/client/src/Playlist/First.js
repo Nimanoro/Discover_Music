@@ -112,7 +112,7 @@ const First = () => {
       mood: questions[1].choices[selectedAnswerIndexes[1]],
       activity: questions[2].choices[selectedAnswerIndexes[2]],
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
-      environment: questions[4].choices[selectedAnswerIndexes[3]]
+      environment: questions[4].choices[selectedAnswerIndexes[4]]
     };
     console.log(userResponses);
 
@@ -121,32 +121,34 @@ const First = () => {
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
-      newAverages.energy += 0.1;
-      newAverages.tempo += 5;
+      newAverages.energy += 0.2;
+      newAverages.tempo += 10;
     } else if (userResponses.mood === 'Calm') {
-      newAverages.energy -= 0.1;
-      newAverages.tempo -= 5;
+      newAverages.energy -= 0.2;
+      newAverages.tempo -= 10;
       user_mood.mood = 'calm';
     } else if (userResponses.mood === 'Happy') {
-      newAverages.valence += 0.1;
+      newAverages.valence += 0.2;
+      newAverages.energy += 0.1;
       user_mood.mood = 'Happy';
     } else if (userResponses.mood === 'Sad') {
-      newAverages.valence -= 0.1;
+      newAverages.valence -= 0.2;
       user_mood.mood = 'Sad';
     } else if (userResponses.mood=== 'Stressed') {
       newAverages.energy -= 0.3;
+      newAverages.valence += 0.1;
       newAverages.tempo -= 10;
       user_mood.mood = 'Stressed';
     }
     
 
     if (userResponses.activity === 'Exercising') {
-      newAverages.energy += 0.1;
+      newAverages.energy += 0.2;
       newAverages.tempo += 10;
       user_mood.activity = 'Exercising';
 
     } else if (userResponses.activity === 'Relaxing') {
-      newAverages.energy -= 0.1;
+      newAverages.energy -= 0.2;
       newAverages.tempo -= 5;
       newAverages.acousticness += 0.1;
       user_mood.activity = 'Relaxing';
@@ -156,15 +158,16 @@ const First = () => {
       user_mood.activity = 'Working';
     } else if (userResponses.activity === 'Commuting') {
       newAverages.energy += 0.2;
+      newAverages.valence -= 0.1;
       newAverages.tempo -= 5;
       user_mood.activity = 'Commuting';
     } 
 
     if (userResponses.environment === 'Quiet') {
-      newAverages.liveness -= 0.1;
+      newAverages.liveness -= 0.2;
       user_mood.environment = 'Quiet';
     } else if (userResponses.environment === 'Noisy') {
-      newAverages.liveness += 0.1;
+      newAverages.liveness += 0.2;
       user_mood.environment = 'Noisy';
     }
     newAverages.tempo = Math.round(newAverages.tempo);
@@ -304,6 +307,7 @@ const First = () => {
               <button onClick={onClickNext} disabled={selectedAnswerIndex === null && writtenAnswer === ''}>
                 {activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
               </button>
+              
             </div>
           </div>
         ) : (

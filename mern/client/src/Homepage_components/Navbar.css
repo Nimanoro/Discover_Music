@@ -37,11 +37,11 @@
 }
 .nav-list li a {
 	text-decoration: none;
-	color: rgb(9, 109, 5);
+	color: rgb(0, 0, 0);
 }
 
 .nav-list li a:hover {
-	color: rgb(80, 254, 5);
+	color: rgb(75, 249, 0);
 }
 
 .rightnav {

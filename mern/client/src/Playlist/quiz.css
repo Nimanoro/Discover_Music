@@ -2,7 +2,7 @@
 
 body {
   font-family: 'Anek Malayalam', sans-serif;
-  background: linear-gradient(90.04deg, #21f309 0.03%, #000000 99.96%);
+  background: linear-gradient(90.04deg, #ffffff 0.03%, #000000 99.96%);
   color: #11052c;
   display: flex;
   justify-content: center;
@@ -97,4 +97,14 @@ body {
 .result p span {
   color: #ffc0cb;
   font-size: 22px;
+}
+
+.btn-play {
+  background-color: #1DB954; /* Spotify green */
+  color: white;
+}
+
+.btn-trash {
+  background-color: #FF0000;
+  color: white;
 }
