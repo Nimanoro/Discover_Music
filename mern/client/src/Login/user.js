@@ -9,7 +9,7 @@ const User = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState('newest');
-  const playlistsPerPage = 2;
+  const playlistsPerPage = 16;
   const [showPopup, setShowPopup] = useState(false); 
 
   const fetchUserProfile = async () => {
@@ -112,7 +112,7 @@ const User = () => {
         <span className="text-sm text-gray-700 dark:text-gray-400">
           Showing <span className="font-semibold text-gray-900 dark:text-white">{(currentPage - 1) * playlistsPerPage + 1}</span> to <span className="font-semibold text-gray-900 dark:text-white">{Math.min(currentPage * playlistsPerPage, userProfile.playlists.length)}</span> of <span className="font-semibold text-gray-900 dark:text-white">{userProfile.playlists.length}</span> Entries
         </span>
-        <div className="inline-flex items-center mt-2 xs:mt-0">
+        <div className="inline-flex mt-2 xs:mt-0">
           <button
             className="flex page-buttons items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             type="button"
@@ -202,7 +202,7 @@ const User = () => {
     <div className="user-container">
       {userProfile ? (
         <div>
-          <h2>Hi, {userProfile.display_name}</h2>
+          <div className='user-name'>Hi, {userProfile.display_name}</div>
           {userProfile.images && userProfile.images.length > 0 && (
             <img src={userProfile.images[0].url} alt="User profile" />
           )}

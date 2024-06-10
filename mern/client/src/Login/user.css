@@ -80,6 +80,11 @@
     align-items: center;
   }
 
+  .user-name {
+    font-size: 1.5rem;
+    align-items: center;
+  }
+
   .popup {
     position: fixed;
     top: 50%;
@@ -103,6 +108,8 @@
 
   .page-buttons {
     background-color: #0ab546;
+    justify-content: center; /* Add this line to center the buttons horizontally */
+
   }
   
     
