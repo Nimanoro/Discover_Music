@@ -242,7 +242,7 @@ const First = () => {
   }
 
   return (
-    <div className="quiz-container">
+    <div className="quiz-container w-full ">
       {!userProfile ? (
         <p>No user profile data available</p>
       ) : (
@@ -319,7 +319,7 @@ const First = () => {
                 <a href={`https://open.spotify.com/playlist/${playlistDetails.id}`} target="_blank" rel="noopener noreferrer">Open Playlist</a>
 
                 {playlistDetails.image && (
-                  <img src={playlistDetails.image} alt={playlistDetails.name} width="200" height="200" />
+                  <img src={playlistDetails.image} alt={playlistDetails.name} className='center mb-2' width="200" height="200" />
                 )}
               </div>
             )}

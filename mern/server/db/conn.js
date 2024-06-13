@@ -1,5 +1,8 @@
 const { MongoClient } = require("mongodb");
-const Db = "mongodb+srv://User:AliPar123@cluster0.q6ruioz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+require('dotenv').config();  // Load environment variables from .env file
+
+const Db = process.env.URI;
+console.log(Db)
 const client = new MongoClient(Db);
 
 let _db;

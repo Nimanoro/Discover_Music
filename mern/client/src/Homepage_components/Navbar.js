@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import './Navbar.css';
+import loginWithSpotify from '../Login/login_func';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const uri = loginWithSpotify();
 
   useEffect(() => {
-    // Check if user is logged in by making a request to the backend
     const checkLoginStatus = async () => {
       try {
         const response = await fetch('http://localhost:2800/api/user', {
@@ -26,31 +26,30 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div>
-      <nav className="navbar background h-100% w-100% overflow-x-hidden">
-        <ul className="nav-list sm:w-full">
-          <li><a href="/">Home</a></li>
-          {isLoggedIn ? (
-            <>
-              <li><a href="my_profile">My Profile</a></li>
-              <li><a href="make_playlist">New playlist</a></li>
-
-              <li><a href="#" onClick={() => {
-                // Log out the user
+    <div className='navbar-container justify-center items-center flex'>
+      <ul className='menu-bar'>
+        <li><a href="/">Home</a></li>
+        {isLoggedIn ? (
+          <>
+            <li><a href="my_profile">My Profile</a></li>
+            <li><a href="make_playlist">New Playlist</a></li>
+            <li><a 
+              href="/"
+              onClick={() => {
                 fetch('http://localhost:2800/api/logout', {
                   method: 'POST',
                   credentials: 'include'
                 }).then(() => {
                   setIsLoggedIn(false);
-                  window.location.href = '/login';
+                  window.location.href = '/';
                 });
-              }}>Logout</a></li>
-            </>
-          ) : (
-            <li><a href="login">Login</a></li>
-          )}
-        </ul>
-      </nav>
+              }}
+            >Logout</a></li>
+          </>
+        ) : (
+          <li><a href={uri}>Login</a></li>
+        )}
+      </ul>
     </div>
   );
 };

@@ -12,6 +12,8 @@ const dbo = require("./db/conn");
 const userRouter = require('./routes/User');
 const searchRouter = require('./routes/Search');
 const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
@@ -56,6 +58,7 @@ app.post("/api/logout", (req, res) => {
     }
     res.clearCookie('connect.sid', { path: '/' });
     res.sendStatus(200);
+    
   });
 });
 

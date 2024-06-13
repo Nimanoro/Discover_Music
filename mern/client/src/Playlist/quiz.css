@@ -6,8 +6,8 @@ body {
   color: #11052c;
   display: flex;
   justify-content: center;
-  margin: 0;
-  padding: 0 30px;
+  width: 100vw;
+  height: 100vh;
 }
 
 .quiz-container {
@@ -87,6 +87,13 @@ body {
   font-size: 24px;
   letter-spacing: 1.4px;
   text-align: center;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
 
 .result p {

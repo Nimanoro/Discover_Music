@@ -3,9 +3,10 @@ const dbo = require("../db/conn");
 const express = require('express');
 const request = require('request');
 const router = express.Router();
+require('dotenv').config();
 
-const client_id = 'c45598b6ed004b3691abf893c3194eed';
-const client_secret = '428f3d12a1af475d976a588517daabf5';
+const client_id = process.env.client_id;
+const client_secret = process.env.client_secret;
 const redirect_uri = 'http://localhost:2800/spotify/callback'; // Ensure this matches your backend port
 
 console.log("Spotify_login.js loaded");

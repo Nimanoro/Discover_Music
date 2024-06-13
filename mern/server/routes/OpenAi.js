@@ -1,9 +1,11 @@
 const { OpenAI } = require('openai');
 const Queue = require('./Queue');
+require('dotenv').config();
 const queue = new Queue();
-const openai =  new OpenAI({ apiKey: 'sk-proj-6a1D77UVSJw7Oy8CTYG4T3BlbkFJFVbPkfzq81v51jINVOCl'});
+const openai =  new OpenAI({ apiKey: process.env.AIapiKey});
 const fetch = require('node-fetch');
 const express = require('express');
+
 
 const generatePlaylistName = async (mood) => {
   const messages = [
