@@ -94,16 +94,18 @@
     border-right: 3px solid;
     font-family: monospace;
     font-size: 2vw;
+    color:#000;
   }
   
   @media only screen and (max-width: 800px) {
-    .typing {width: 25ch;
+    .typing {width: 35ch;
             animation: typing 3s steps(25), blink .5s step-end infinite alternate;
             white-space: nowrap;
             overflow: hidden;
             border-right: 3px solid;
             font-family: monospace;
-            font-size: 5vw;
+            font-size: 1vw;
+            color:#000;
     }
   }
   
@@ -118,4 +120,11 @@
     50% {
       border-color: transparent
     }
+  }
+  .desc {
+    font-size: 1.5vw;
+    color:#000;
+  }
+  .dark .desc {
+    color: #f8f8f4;
   }

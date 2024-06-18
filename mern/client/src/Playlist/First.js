@@ -108,11 +108,11 @@ const First = () => {
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
   const adjustAverages = () => {
     const userResponses = {
-      premium: questions[0].choices[selectedAnswerIndexes[0]],
-      mood: questions[1].choices[selectedAnswerIndexes[1]],
-      activity: questions[2].choices[selectedAnswerIndexes[2]],
+      premium: false,
+      mood: questions[1].choices[selectedAnswerIndexes[0]],
+      activity: questions[2].choices[selectedAnswerIndexes[1]],
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
-      environment: questions[4].choices[selectedAnswerIndexes[4]]
+      environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
     console.log(userResponses);
 
@@ -280,12 +280,13 @@ const First = () => {
             ) : (
               <div>
                 <input
+                  className='h-11 rounded text-black border border-gray-400 focus:outline-none focus:border-blue-500 px-3 py-1 mb-3'
                   type="text"
                   value={writtenAnswer}
                   onChange={(e) => setWrittenAnswer(e.target.value)}
-                  placeholder="Type your answer here"
+                  placeholder=" e.g. 'Shape of You' or ed sheeran"
                 />
-                <button onClick={searchTracks}>Search</button>
+                <button className=""onClick={searchTracks}>Search</button>
                 <ul>
                   {searchResults.map((track) => (
                     <li key={track.id} onClick={() => selectTrack(track)}>

@@ -202,13 +202,13 @@ const User = () => {
     <div className="user-container">
       {userProfile ? (
         <div>
-          <div className='user-name'>Hi, {userProfile.display_name}</div>
+          <div className="user-name">Hi, {userProfile.display_name}</div>
           {userProfile.images && userProfile.images.length > 0 && (
-            <img src={userProfile.images[0].url} alt="User profile" />
+            <img src={userProfile.images[0].url} alt="User profile" className="user-profile-picture" />
           )}
 
           <div className="user-section">
-            <h3>Your Playlists</h3>
+            <h3 className='section-title'>Your Playlists</h3>
             <div className="sort-options">
               <label htmlFor="sort">Sort by: </label>
               <select id="sort" value={sortOption} onChange={handleSortChange}>
@@ -221,8 +221,8 @@ const User = () => {
             {renderPagination()}
           </div>
 
-          <div className="user-section">
-            <h3>Recently Played Tracks</h3>
+          <div className="user-section ">
+            <h3 className='section-title'>Recently Played Tracks</h3>
             {renderRecentlyPlayedTracks()}
           </div>
         </div>

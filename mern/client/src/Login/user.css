@@ -1,115 +1,176 @@
 .user-container {
-    padding: 20px;
-  }
-  
-  .user-section {
-    margin-bottom: 20px;
-  }
-  
-  .playlist-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
-  
-  .playlist-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* This will center align the text */
-    text-align: center;
-    position: relative;
-  }
-  
-  .playlist-image-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-  }
-  
-  .playlist-image {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .playlist-buttons {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .playlist-image-container:hover .playlist-buttons {
-    opacity: 1;
-  }
-  
-  .playlist-buttons button {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .btn-play {
-    background-color: #1DB954; /* Spotify green */
-    color: white;
-  }
-  
-  .btn-trash {
-    background-color: #FF0000; /* Red for delete */
-    color: white;
-  }
-  
-  .playlist-item p {
-    text-align: center;
-    margin-top: 10px; /* Adjust as needed for spacing */
-  }
-  
-  
-  .recently-played-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-  }
-  
-  .recently-played-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  padding: 20px;
+}
 
-  .user-name {
-    font-size: 1.5rem;
-    align-items: center;
-  }
+.user-section {
+  margin-bottom: 20px;
+}
 
-  .popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  
-  .popup-content {
-    text-align: center;
-  }
-  
-  .popup button {
-    margin-top: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
+.user-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2F353C; /* Spotify green for better visibility */
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-  .page-buttons {
-    background-color: #0ab546;
-    justify-content: center; /* Add this line to center the buttons horizontally */
+.dark .user-name {
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-  }
-  
-    
+.user-profile-picture {
+  display: block;
+  margin: 0 auto 20px; /* Center the image and add margin at the bottom */
+  border-radius: 50%; /* Make the image circular */
+  width: 150px; /* Set a fixed width */
+  height: 150px; /* Set a fixed height */
+
+  object-fit: cover; /* Ensure the image covers the container without distortion */
+  border: 5px solid #A5A9CB; /* Add a border with Spotify green color */
+}
+
+.section-title {
+  font-size: 1.5rem; /* Increase font size */
+  font-weight: bold;
+  text-decoration: underline; /* Add underline */
+  margin-bottom: 20px; /* Add margin for spacing */
+  color: #2F353C; /* Spotify green for better visibility */
+}
+
+.dark .section-title {
+  color: #ffffff; /* Ensure the text color is the same in dark mode */
+}
+
+
+.dark .user-name {
+  color: #ffffff; /* Ensure the text color is the same in dark mode */
+}
+
+.dark .user-profile-picture {
+  border: 5px solid #002E46; /* Ensure the border color is the same in dark mode */
+}
+
+/* Other existing CSS styles... */
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.playlist-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This will center align the text */
+  text-align: center;
+  position: relative;
+}
+
+.playlist-image-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.playlist-image {
+  width: 100%;
+  height: 100%;
+}
+
+.playlist-buttons {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.playlist-image-container:hover .playlist-buttons {
+  opacity: 1;
+}
+
+.playlist-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-play {
+  background-color: #1DB954; /* Spotify green */
+  color: white;
+}
+
+.dark .btn-play {
+  background-color: #1a7431; /* Darker green for dark mode */
+}
+
+.btn-trash {
+  background-color: #FF0000; /* Red for delete */
+  color: white;
+}
+
+.dark .btn-trash {
+  background-color: #cc0000; /* Darker red for dark mode */
+}
+
+.playlist-item p {
+  text-align: center;
+  margin-top: 10px; /* Adjust as needed for spacing */
+}
+
+.recently-played-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.recently-played-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dark .popup {
+  background-color: #333333; /* Darker background for popup in dark mode */
+  color: #ffffff; /* White text color in dark mode */
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.popup button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.page-buttons {
+  background-color: #0ab546;
+  justify-content: center; /* Add this line to center the buttons horizontally */
+}
+
+.dark .page-buttons {
+  background-color: #088a3b; /* Darker green for page buttons in dark mode */
+}
+
+.dark .playlist-item p {
+  color: #d1d1d1; /* Light text color for playlist item in dark mode */
+}

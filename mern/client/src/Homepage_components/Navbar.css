@@ -3,7 +3,8 @@
 	height: fit-content;
 	display: inline-flex;
 	position: center;
-	background-color: rgba(0, 0, 0, .4);
+	background-color: #A5A9CB;
+
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);  
 	align-items: center;
@@ -11,9 +12,13 @@
 	margin: 50px 0 0 0;
   }
   
+  .dark .menu-bar {
+	background-color: #967DF9;
+  }
+  
   .menu-bar li {
 	list-style: none;
-	color: white;
+	color: white; 
 	font-family: sans-serif;
 	font-weight: bold;
 	padding: 12px 16px;
@@ -21,6 +26,10 @@
 	position: relative;
 	cursor: pointer;
 	white-space: nowrap;
+  }
+  
+  .dark .menu-bar li {
+	color: #ffffff; /* Slightly lighter color for dark mode */
   }
   
   .menu-bar li::before {
@@ -36,12 +45,21 @@
   }
   
   .menu-bar li:hover::before {
-	background: linear-gradient(to bottom, #e8edec, #d2d1d3);
+	background: linear-gradient(to bottom, #e1e0e0, #d2d1d3);
 	box-shadow: 0px 3px 20px 0px black;
 	transform: scale(1.2);
   }
   
+  .dark .menu-bar li:hover::before {
+	background: linear-gradient(to bottom, #27035e, #2c2c2c);
+	box-shadow: 0px 3px 20px 0px white;
+  }
+  
   .menu-bar li:hover {
 	color: black;
+  }
+  
+  .dark .menu-bar li:hover {
+	color: white;
   }
   

@@ -36,16 +36,16 @@ const Home = () =>{
         <div className="w-100% h-90% sm:w-50% sm:h-50% justify-end lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
           <div className= "wrapper">
             <div 
-            className="text-center typing title-font md:text-4xl text-3xl mb-4 font-medium text-white pb:2vh">
-            Hey there, I'm Discover Music!
+            className="text-center typing title-font md:text-4xl text-3xl mb-4 font-medium dark:text-white pb:2vh">
+            Hi there, I'm Discover Music!
             </div>
-           <p className="mx-10 text-center text-lg sm:text-md px-10 sm:px-0 text-white">
+           <p className="mx-10 desc text-center text-lg sm:text-md px-10 sm:px-0 ">
            I am here to help you discover new music.
            I am a music recommendation system that will help you find new music based on your preferences and your mood.
           </p>
-          <img className="size-[40rem] justify-center" src={colorfulHeadphones} alt="music" />
+          <img className="size-[30rem] justify-center" src={colorfulHeadphones} alt="music" />
           </div>
-          {isLoggedIn ? ( 
+          {/* {isLoggedIn ? ( 
             <div className="flex md:px-40 justify-items-center align-center">
             <a
               href='/make_playlist'
@@ -61,20 +61,20 @@ const Home = () =>{
             </div>
           ): (
             
-          <div className="flex md:px-40 justify-items-center align-center">
-            <a
-              href="/Login"
-              className="ml-4 inline-flex justify-center text-center btn-5 text-white  border-0 focus:outline-none hover:bg-green-600 rounded text-lg">
-              <span>Login with Spotify</span>
-            </a>
-            <a
-              href="/User"
-              className="text-center btn-5 justify-center inline-flex focus:outline-none hover:bg-green-600 hover:text-white rounded text-lg">
-               <span>Your user profile</span>
+          // <div className="flex md:px-40 justify-items-center align-center">
+          //   <a
+          //     href="/Login"
+          //     className="ml-4 inline-flex justify-center text-center btn-5 text-white  border-0 focus:outline-none hover:bg-green-600 rounded text-lg">
+          //     <span>Login with Spotify</span>
+          //   </a>
+          //   <a
+          //     href="/User"
+          //     className="text-center btn-5 justify-center inline-flex focus:outline-none hover:bg-green-600 hover:text-white rounded text-lg">
+          //      <span>Your user profile</span>
               
-            </a>
-            </div>
-          )}
+          //   </a>
+          //   </div>
+          )} */}
         </div>
       </div>
     </section>

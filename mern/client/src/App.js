@@ -8,7 +8,6 @@ import First from "./Playlist/First.js";
 import { Helmet } from 'react-helmet';
 import PlaylistsPage from "./Playlist/PlaylistPage.js";
 
-
 export default function App() {
   return (
     <body> 
@@ -21,7 +20,7 @@ export default function App() {
         <Route exact path='/' element={<Home/>} />
         <Route exact path='/my_profile' element={<User/>} />
         <Route exact path='/user' element={<User/>} />
-        <Route exact path = '/make_playlist' element={<PlaylistsPage/>} />
+        <Route exact path = '/make_playlist' element={<First/>} />
         <Route exact path = '/by-song' element={<First/>} />
 
 
