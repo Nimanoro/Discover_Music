@@ -73,6 +73,7 @@
   position: relative;
   width: 150px;
   height: 150px;
+  margin-bottom: 16px;
 }
 
 .playlist-image {
@@ -83,12 +84,11 @@
 .playlist-buttons {
   position: absolute;
   bottom: 0;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.3s;
+  height: 50px;
+  width: 150px;
 }
 
 .playlist-image-container:hover .playlist-buttons {
@@ -106,7 +106,12 @@
   background-color: #1DB954; /* Spotify green */
   color: white;
 }
-
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
 .dark .btn-play {
   background-color: #1a7431; /* Darker green for dark mode */
 }
@@ -174,3 +179,39 @@
 .dark .playlist-item p {
   color: #d1d1d1; /* Light text color for playlist item in dark mode */
 }
+
+.playlist-item {
+  position: relative;
+  text-align: center;
+}
+
+.playlist-image-container {
+  position: relative;
+}
+
+.playlist-buttons {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.5);
+  height: 50px;
+  width: 150px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.playlist-image-container:hover + .playlist-buttons {
+  opacity: 1;
+}
+
+.playlist-title {
+  margin-top: 6px;
+  transition: opacity 0.3s;
+}
+
+.playlist-item:hover .playlist-title {
+  opacity: 0;
+}
+
+

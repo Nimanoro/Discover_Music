@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Questions from './questions';
 import './quiz.css';
 
+
+
 const First = () => {
   const [userProfile, setUserProfile] = useState(null);
+  const [quizStarted, setQuizStarted] = useState(false); // New state to track if the quiz has started
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -17,6 +21,12 @@ const First = () => {
   const [playlistDetails, setPlaylistDetails] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const startQuiz = () => {
+    setQuizStarted(true);
+  };
+  
+
+  
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -243,105 +253,119 @@ const First = () => {
 
   return (
     <div className="quiz-container w-full ">
-      {!userProfile ? (
-        <p>No user profile data available</p>
-      ) : (
-        <div>
-          <h2>Hi, {userProfile.display_name}</h2>
-          {userProfile.images && userProfile.images.length > 0 && (
-            <img src={userProfile.images[0].url} alt="User profile" />
-          )}
-          <div>
-            Let's make you a playlist!
-            <p>First, I am gonna ask you some questions...</p>
-          </div>
-        </div>
-      )}
+      {!quizStarted ? (
+  <div className="landing-page flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
+    {userProfile && (
+      <>
+        {userProfile.images && userProfile.images.length > 0 && (
+          <img src={userProfile.images[0].url} alt="User profile" className="rounded-full w-32 h-32 mb-4" />
+        )}
+        <h2 className="text-2xl mb-4">Hello {userProfile.display_name} !</h2>
+      </>
+    )}
+    <h2 className="text-3xl mb-4">Are you ready to make a new playlist?</h2>
+    <button 
+      className="btn-start bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" 
+      onClick={startQuiz}>
+      I'm Ready
+    </button>
+  </div>
+) : (
+  <>
+    {!userProfile ? (
+      <p>No user profile data available</p>
+    ) : (
       <div>
-        {!showResult ? (
+        <div>
+          Let's make you a playlist!
+          <p>First, I am gonna ask you some questions...</p>
+        </div>
+      </div>
+    )}
+    <div>
+      {!showResult ? (
+        <div>
           <div>
-            <div>
-              <span className="active-question-no">{addLeadingZero(activeQuestion + 1)}</span>
-              <span className="total-question">/{addLeadingZero(questions.length)}</span>
-            </div>
-            <h2>{question}</h2>
-            {type === 'MCQs' ? (
-              <ul>
-                {choices.map((answer, index) => (
-                  <li
-                    onClick={() => onAnswerSelected(answer, index)}
-                    key={answer}
-                    className={selectedAnswerIndex === index ? 'selected-answer' : null}
-                  >
-                    {answer}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div>
-                <input
-                  className='h-11 rounded text-black border border-gray-400 focus:outline-none focus:border-blue-500 px-3 py-1 mb-3'
-                  type="text"
-                  value={writtenAnswer}
-                  onChange={(e) => setWrittenAnswer(e.target.value)}
-                  placeholder=" e.g. 'Shape of You' or ed sheeran"
-                />
-                <button className=""onClick={searchTracks}>Search</button>
-                <ul>
-                  {searchResults.map((track) => (
-                    <li key={track.id} onClick={() => selectTrack(track)}>
-                      {track.album && track.album.images && track.album.images.length > 0 ? (
-                        <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                      ) : (
-                        <img src="default_image_url" alt="Default" width="50" height="50" />
-                      )}
-                      {track.name} by {track.artists.map(artist => artist.name).join(', ')}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="flex-right">
-              <button onClick={onClickSkip}>
-                Skip
-              </button>
-              <button onClick={onClickNext} disabled={selectedAnswerIndex === null && writtenAnswer === ''}>
-                {activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
-              </button>
-              
-            </div>
+            <span className="active-question-no">{addLeadingZero(activeQuestion + 1)}</span>
+            <span className="total-question">/{addLeadingZero(questions.length)}</span>
           </div>
-        ) : (
-  
-          <div className="result">
-            {playlistDetails && (
-              <div>
-                <h3>{playlistDetails.name}</h3>
-                <a href={`https://open.spotify.com/playlist/${playlistDetails.id}`} target="_blank" rel="noopener noreferrer">Open Playlist</a>
-
-                {playlistDetails.image && (
-                  <img src={playlistDetails.image} alt={playlistDetails.name} className='center mb-2' width="200" height="200" />
-                )}
-              </div>
-            )}
-            <h3>Recommended Tracks</h3>
+          <h2>{question}</h2>
+          {type === 'MCQs' ? (
             <ul>
-              {recommendations.map((track) => (
-                <li key={track.id}>
-                  {track.album && track.album.images && track.album.images.length > 0 ? (
-                    <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                  ) : (
-                    <img src="default_image_url" alt="Default" width="50" height="50" />
-                  )}
-                  <p>{track.name} by {track.artists.map(artist => artist.name).join(', ')}</p>
+              {choices.map((answer, index) => (
+                <li
+                  onClick={() => onAnswerSelected(answer, index)}
+                  key={answer}
+                  className={selectedAnswerIndex === index ? 'selected-answer' : null}
+                >
+                  {answer}
                 </li>
               ))}
             </ul>
+          ) : (
+            <div>
+              <input
+                className='h-11 rounded text-black border border-gray-400 focus:outline-none focus:border-blue-500 px-3 py-1 mb-3'
+                type="text"
+                value={writtenAnswer}
+                onChange={(e) => setWrittenAnswer(e.target.value)}
+                placeholder=" e.g. 'Shape of You' or ed sheeran"
+              />
+              <button className="" onClick={searchTracks}>Search</button>
+              <ul>
+                {searchResults.map((track) => (
+                  <li key={track.id} onClick={() => selectTrack(track)}>
+                    {track.album && track.album.images && track.album.images.length > 0 ? (
+                      <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                    ) : (
+                      <img src="default_image_url" alt="Default" width="50" height="50" />
+                    )}
+                    {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="flex-right">
+            <button onClick={onClickSkip}>
+              Skip
+            </button>
+            <button onClick={onClickNext} disabled={selectedAnswerIndex === null && writtenAnswer === ''}>
+              {activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
+            </button>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="result">
+          {playlistDetails && (
+            <div>
+              <h3>{playlistDetails.name}</h3>
+              <a href={`https://open.spotify.com/playlist/${playlistDetails.id}`} target="_blank" rel="noopener noreferrer">Open Playlist</a>
+
+              {playlistDetails.image && (
+                <img src={playlistDetails.image} alt={playlistDetails.name} className='center mb-2' width="200" height="200" />
+              )}
+            </div>
+          )}
+          <h3>Recommended Tracks</h3>
+          <ul>
+            {recommendations.map((track) => (
+              <li key={track.id}>
+                {track.album && track.album.images && track.album.images.length > 0 ? (
+                  <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                ) : (
+                  <img src="default_image_url" alt="Default" width="50" height="50" />
+                )}
+                <p>{track.name} by {track.artists.map(artist => artist.name).join(', ')}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
-  );
-};
+  </>
+)}
+</div>
+)}
 
 export default First;

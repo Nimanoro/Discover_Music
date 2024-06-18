@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './user.css';
+import SpotifyIcon from './images/spotify_icon_green.png';
 
 const User = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -59,14 +60,14 @@ const User = () => {
     if (!userProfile || !userProfile.playlists || userProfile.playlists.length === 0) {
       return <p>No playlists available.</p>;
     }
-
+  
     const sortedPlaylists = sortPlaylists([...userProfile.playlists]);
     const indexOfLastPlaylist = currentPage * playlistsPerPage;
     const indexOfFirstPlaylist = indexOfLastPlaylist - playlistsPerPage;
     const currentPlaylists = sortedPlaylists.slice(indexOfFirstPlaylist, indexOfLastPlaylist);
-
+  
     return (
-      <div className="playlist-grid">
+      <div className="playlist-grid mb-5">
         {currentPlaylists.map(playlist => (
           <div key={playlist.id} className="playlist-item">
             <div className="playlist-image-container">
@@ -75,29 +76,30 @@ const User = () => {
               ) : (
                 <img src="default_image_url" alt="Default" className="playlist-image" />
               )}
-              <div className="playlist-buttons">
-                <button 
-                  className="btn-play"
-                  type="button"
-                  onClick={() => playPlaylist(playlist.id)}
-                >
-                  ▶
-                </button>
-                <button 
-                  className="btn-trash"
-                  type="button"
-                  onClick={() => removePlaylist(playlist.id)}
-                >
-                  <FontAwesomeIcon icon={faTrash} aria-hidden="true" />
-                </button>
-              </div>
             </div>
-            <p className='align-middle'>{playlist.name}</p>
+            <div className="playlist-buttons">
+              <button 
+                className="btn-play"
+                type="button"
+                onClick={() => playPlaylist(playlist.id)}
+              >
+                <img className="center" src={SpotifyIcon} alt="Play on Spotify"/>
+              </button>
+              <button 
+                className="btn-trash"
+                type="button"
+                onClick={() => removePlaylist(playlist.id)}
+              >
+                <FontAwesomeIcon icon={faTrash} aria-hidden="true" />
+              </button>
+            </div>
+            <p className='playlist-title'>{playlist.name}</p>
           </div>
         ))}
       </div>
     );
   };
+  
 
   const renderPagination = () => {
     const pageNumbers = [];
@@ -209,7 +211,7 @@ const User = () => {
 
           <div className="user-section">
             <h3 className='section-title'>Your Playlists</h3>
-            <div className="sort-options">
+            <div className="sort-options mb-3">
               <label htmlFor="sort">Sort by: </label>
               <select id="sort" value={sortOption} onChange={handleSortChange}>
                 <option value="newest">Newest</option>
