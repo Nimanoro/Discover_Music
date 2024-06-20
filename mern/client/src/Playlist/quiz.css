@@ -21,16 +21,20 @@ body {
 }
 
 .quiz-container {
-  max-width: 500px;
-  min-width: 250px;
   background: #ffffff;
   border-radius: 4px;
+  height: 100%;
   margin-top: 100px;
-  margin-left: 40px;
-  padding: 30px 60px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  display: flex;
+  color: black;
+  justify-content: flex-start;
 }
 
 .dark .quiz-container {
+  
   background: #3C325A;
 }
 
@@ -38,6 +42,7 @@ body {
   font-size: 32px;
   font-weight: 500;
   color: #800080;
+  justify-content: center;
 }
 
 .dark .quiz-container .active-question-no {
@@ -57,7 +62,6 @@ body {
 .quiz-container h2 {
   font-size: 20px;
   font-weight: 500;
-  margin: 0;
 }
 
 .dark .quiz-container h2 {
@@ -66,7 +70,6 @@ body {
 
 .quiz-container ul {
   margin-top: 20px;
-  margin-left: -40px;
 }
 
 .quiz-container ul li {
@@ -94,8 +97,8 @@ body {
 }
 
 .dark .quiz-container ul .selected-answer {
-  background: #555555;
-  border: solid #ffd700; /* Example: golden border for dark mode */
+  background: #17123f;
+  border: solid #967DF9; /* Example: golden border for dark mode */
 }
 
 .quiz-container button {
@@ -137,6 +140,7 @@ body {
   text-align: center;
 }
 
+
 .dark .result h3 {
   color: #ffffff;
 }
@@ -148,6 +152,11 @@ body {
   width: 50%;
 }
 
+.center-but {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .result p {
   font-size: 16px;
   font-weight: 500;
@@ -186,19 +195,27 @@ body {
 
 
 .landing-page {
-  height: 100vh;
+  border-radius: 10px;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #1DB954;
-  color: white;
+  background-color: #A5A9CB;
+  color: black;
+  margin-top: 100px;
+
 }
 
 .landing-page img {
   width: 128px;
   height: 128px;
   border-radius: 50%;
+}
+
+.dark .landing-page {
+  background-color: #967DF9;
+  color: white;
 }
 
 .btn-start {
@@ -213,4 +230,94 @@ body {
 
 .btn-start:hover {
   background-color: #1ed760;
+}
+
+
+.progress-circle {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(#800080 var(--progress), #def6ff var(--progress));
+  margin-bottom: 20px;
+}
+
+.progress-circle::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.progress-circle .progress-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: bold;
+  color: #800080;
+}
+
+.dark .progress-circle {
+  background: conic-gradient(#967DF9 var(--progress), #ffffff var(--progress));
+}
+
+.dark .progress-circle::before {
+  background-color: #3C325A;
+}
+
+.dark .progress-circle .progress-content {
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .quiz-container {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .progress-circle {
+        width: 60px;
+        height: 60px;
+    }
+
+    .progress-circle::before {
+        top: 5px;
+        left: 5px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .progress-circle .progress-content {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quiz-container {
+        margin-top: 50px;
+        padding: 15px;
+    }
+
+    .progress-circle {
+        width: 50px;
+        height: 50px;
+    }
+
+    .progress-circle::before {
+        top: 5px;
+        left: 5px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .progress-circle .progress-content {
+        font-size: 12px;
+    }
 }

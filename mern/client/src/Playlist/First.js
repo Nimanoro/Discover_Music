@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Questions from './questions';
 import './quiz.css';
+import SpotifyIcon from './images/spotify_icon_green.png';
+
 
 
 
@@ -252,9 +254,9 @@ const First = () => {
   }
 
   return (
-    <div className="quiz-container w-full ">
+    <div>
       {!quizStarted ? (
-  <div className="landing-page flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
+  <div className="landing-page">
     {userProfile && (
       <>
         {userProfile.images && userProfile.images.length > 0 && (
@@ -264,6 +266,8 @@ const First = () => {
       </>
     )}
     <h2 className="text-3xl mb-4">Are you ready to make a new playlist?</h2>
+      Let's make you a playlist!
+      <p>First, I am gonna ask you some questions...</p>
     <button 
       className="btn-start bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" 
       onClick={startQuiz}>
@@ -271,32 +275,28 @@ const First = () => {
     </button>
   </div>
 ) : (
+  
   <>
-    {!userProfile ? (
-      <p>No user profile data available</p>
-    ) : (
-      <div>
-        <div>
-          Let's make you a playlist!
-          <p>First, I am gonna ask you some questions...</p>
-        </div>
-      </div>
-    )}
     <div>
       {!showResult ? (
-        <div>
-          <div>
-            <span className="active-question-no">{addLeadingZero(activeQuestion + 1)}</span>
-            <span className="total-question">/{addLeadingZero(questions.length)}</span>
+        <div className="quiz-container">
+          <div className='mb-2'>
+          <div className="progress-circle" style={{ '--progress': `${(activeQuestion + 1) / questions.length * 100}%` }}>
+          <div className="progress-content">
+            {activeQuestion + 1}/{questions.length}
           </div>
-          <h2>{question}</h2>
+          </div>
+
+          </div>
+          <h2 className='mb-7'>{question}</h2>
           {type === 'MCQs' ? (
-            <ul>
+            <ul className=''>
               {choices.map((answer, index) => (
                 <li
                   onClick={() => onAnswerSelected(answer, index)}
                   key={answer}
                   className={selectedAnswerIndex === index ? 'selected-answer' : null}
+                  
                 >
                   {answer}
                 </li>
@@ -326,7 +326,7 @@ const First = () => {
               </ul>
             </div>
           )}
-          <div className="flex-right">
+          <div className='flex-right ml-5'>
             <button onClick={onClickSkip}>
               Skip
             </button>
@@ -336,15 +336,25 @@ const First = () => {
           </div>
         </div>
       ) : (
-        <div className="result">
+        <div className="result quiz-container">
           {playlistDetails && (
             <div>
               <h3>{playlistDetails.name}</h3>
-              <a href={`https://open.spotify.com/playlist/${playlistDetails.id}`} target="_blank" rel="noopener noreferrer">Open Playlist</a>
-
+              
+        
               {playlistDetails.image && (
-                <img src={playlistDetails.image} alt={playlistDetails.name} className='center mb-2' width="200" height="200" />
+                <img src={playlistDetails.image} alt={playlistDetails.name} className='center-but mb-2' width="200" height="200" />
+                
               )}
+              <a href={`https://open.spotify.com/playlist/${playlistDetails.id}`} target="_blank" rel="noopener noreferrer">
+              <button 
+                className="w-1/3 center-but"
+                type="button"
+              >
+              
+                <img className="center" src={SpotifyIcon} alt="Play on Spotify"/>
+              </button>
+              </a>
             </div>
           )}
           <h3>Recommended Tracks</h3>
@@ -364,6 +374,7 @@ const First = () => {
       )}
     </div>
   </>
+
 )}
 </div>
 )}

@@ -21,7 +21,7 @@ fs.readFile(webpackConfigPath, 'utf8', (err, data) => {
   // Modify the configuration to set allowedHosts
   const modifiedData = data.replace(
     /allowedHosts: \[\]/,
-    'allowedHosts: ["localhost"]'
+    'allowedHosts: ["localhost", "discover-music-1.onrender.com"]'
   );
 
   // Write the modified configuration back to the file

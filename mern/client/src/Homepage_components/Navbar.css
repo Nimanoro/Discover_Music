@@ -4,6 +4,9 @@
 	display: inline-flex;
 	position: center;
 	background-color: #A5A9CB;
+  	flex-direction: row;
+  	justify-content: center;
+  	align-items: center;
 
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);  
@@ -61,5 +64,39 @@
   
   .dark .menu-bar li:hover {
 	color: white;
+  }
+
+  @media (max-width: 768px) {
+	.menu-bar {
+	  flex-direction: row;
+	  padding: 0 5px;
+	}
+  
+	.menu-bar li {
+	  padding: 6px 10px;
+	  margin: 3px 0;
+	}
+  
+	.navbar-container {
+	  width: 100%;
+	  padding: 0;
+	}
+  }
+  
+  @media (max-width: 480px) {
+	.menu-bar {
+	  flex-direction: row;
+	  padding: 5px 6px;
+	}
+  
+	.menu-bar li {
+	  padding: 4px 8px;
+	  margin: 2px 0;
+	}
+  
+	.navbar-container {
+	  width: 100%;
+	  padding: 0;
+	}
   }
   

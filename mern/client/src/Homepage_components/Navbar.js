@@ -48,7 +48,7 @@ const Navbar = () => {
 
   return (
     <div className='navbar-container justify-center items-center flex'>
-      <ul className='menu-bar'>
+      <ul className='menu-bar justify-center items-center flex'>
         <li><a href="/">Home</a></li>
         {isLoggedIn ? (
           <>
