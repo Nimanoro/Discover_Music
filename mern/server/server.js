@@ -9,7 +9,6 @@ const port = process.env.PORT || 2800;
 const spotifyLogin = require("./routes/Spotify_login");
 const recommendationsRouter = require('./routes/Spotify_reccomendations')
 const dbo = require("./db/conn");
-const Session = require('../models/Session');
 const userRouter = require('./routes/User');
 const searchRouter = require('./routes/Search');
 const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
