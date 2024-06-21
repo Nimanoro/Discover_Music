@@ -7,7 +7,7 @@ import colorfulHeadphones from './images/colorfulheadphones.png';
 const Home = () =>{
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const API_URL = process.env.REACT_APP_API_URL;
+    const API_URL = process.env.REACT_APP_API_URI;
 
 
   useEffect(() => {

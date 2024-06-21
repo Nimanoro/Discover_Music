@@ -9,7 +9,7 @@ import SpotifyIcon from './images/spotify_icon_green.png';
 const First = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [quizStarted, setQuizStarted] = useState(false); // New state to track if the quiz has started
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URI;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
