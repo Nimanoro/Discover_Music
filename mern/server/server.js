@@ -50,6 +50,9 @@ app.use(searchRouter);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../client/build")));
  
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.post("/api/logout", (req, res) => {
   req.session.destroy((err) => {
