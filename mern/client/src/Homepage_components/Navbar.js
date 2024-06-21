@@ -58,7 +58,7 @@ const Navbar = () => {
             <li><a 
               href="/"
               onClick={() => {
-                fetch('http://localhost:2800/api/logout', {
+                fetch(`${API_URL}/api/logout`, {
                   method: 'POST',
                   credentials: 'include'
                 }).then(() => {
