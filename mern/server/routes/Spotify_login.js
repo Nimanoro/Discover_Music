@@ -11,6 +11,8 @@ const redirect_uri = 'https://discover-music.onrender.com/spotify/callback'; // 
 
 console.log("Spotify_login.js loaded");
 
+console.log("client_id: ", client_id);
+console.log(redirect_uri);
 const fetchAudioFeatures = async (accessToken, trackIds) => {
   const response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds.join(',')}`, {
     headers: {
