@@ -48,13 +48,7 @@ app.use(searchRouter);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../client/build")));
-
-app.get("/api/user", async (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).send('User not logged in');
-  }
-  res.json(req.session.user);
-});
+ 
 
 app.post("/api/logout", (req, res) => {
   req.session.destroy((err) => {
