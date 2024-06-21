@@ -168,7 +168,8 @@ router.get('/callback', async (req, res) => {
         await usersCollection.insertOne(userDoc);
         console.log('User Profile Inserted:', userDoc);
       }
-      res.cookie('userDOC', userDoc, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'none' });
+      
+      res.cookie('userID', userProfile.id, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'none' });
       res.redirect(`https://discover-music-1.onrender.com/`);
     } catch (dbError) {
       console.error('Database error:', dbError);
