@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const client_id = process.env.client_id;
 const client_secret = process.env.client_secret;
-const redirect_uri = 'http://localhost:2800/spotify/callback'; // Ensure this matches your backend port
+const redirect_uri = 'https://discover-music.onrender.com/spotify/callback'; // Ensure this matches your backend port
 
 console.log("Spotify_login.js loaded");
 
