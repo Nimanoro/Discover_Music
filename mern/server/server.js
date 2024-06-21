@@ -62,10 +62,6 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-});
-
 app.listen(port, async () => {
   await dbo.connectToServer((err) => {
     if (err) console.error(err);
