@@ -16,11 +16,9 @@ const dotenv = require('dotenv');
 var cookieParser = require('cookie-parser');
 
 dotenv.config();
-app.use(cookieParser());
 const app = express();
 app.use(bodyParser.json());
-
-
+app.use(cookieParser());
 app.use(session({
   secret: 'your_secret_key',
   resave: false,
