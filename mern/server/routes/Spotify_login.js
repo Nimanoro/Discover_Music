@@ -169,7 +169,7 @@ router.get('/callback', async (req, res) => {
         console.log('User Profile Inserted:', userDoc);
       }
 
-      res.redirect(`https://discover-music-1.onrender.com/user`);
+      res.redirect(`https://discover-music-1.onrender.com/`);
     } catch (dbError) {
       console.error('Database error:', dbError);
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
