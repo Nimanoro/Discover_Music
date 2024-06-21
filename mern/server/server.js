@@ -28,6 +28,8 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production', 
     maxAge: 180 * 60 * 1000 } // 3 hours
 }));
+
+
 app.use(cors({
   origin: 'https://discover-music-1.onrender.com', // Allow requests from this origin
   credentials: true // Allow credentials (cookies, authorization headers, etc.)

@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('color-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   const uri = loginWithSpotify();
-  const API_URL = process.env.EACT_APP_API_URI;
+  const API_URL = process.env.REACT_APP_API_URI;
 
   useEffect(() => {
     if (theme === 'dark') {
