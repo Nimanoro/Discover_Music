@@ -8,6 +8,23 @@ const Navbar = () => {
   const uri = loginWithSpotify();
   const API_URL = process.env.REACT_APP_API_URI;
 
+  const getid = () => {
+    try {
+      const response = await fetch(`${API_URL}/api/login`, {
+        credentials: 'include' // Ensure cookies are included in the request
+      });
+      if (response.ok) {
+        response.json().
+      } else {
+        setIsLoggedIn(false);
+      }
+    } catch (error) {
+      setIsLoggedIn(false);
+    }
+  };
+
+
+  }
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
