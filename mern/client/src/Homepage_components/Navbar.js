@@ -6,6 +6,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('color-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   const uri = loginWithSpotify();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -20,7 +21,7 @@ const Navbar = () => {
 
     const checkLoginStatus = async () => {
       try {
-        const response = await fetch('http://localhost:2800/api/user', {
+        const response = await fetch(`${API_URL}/api/user`, {
           credentials: 'include' // Ensure cookies are included in the request
         });
         if (response.ok) {
