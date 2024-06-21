@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(session({
   secret: 'your_secret_key',
   resave: false,
-  saveUninitialized: True,
+  saveUninitialized: true,
   cookie: { 
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', 
