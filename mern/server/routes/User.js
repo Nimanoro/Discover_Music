@@ -1,12 +1,13 @@
 const dbo = require("../db/conn");
 const express = require('express');
+var cookieParser = require('cookie-parser');
 const router = express.Router();
 
 router.get('/api/user', async (req, res) => {
     const db_connect = dbo.getDb();
     const usersCollection = db_connect.collection('users');
   
-    const userId = req.headers['userID'];
+    const userId = req.cookies.userID;
   
     if (!userId) {
       return res.status(401).send('User not logged in');

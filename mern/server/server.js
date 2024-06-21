@@ -13,8 +13,10 @@ const userRouter = require('./routes/User');
 const searchRouter = require('./routes/Search');
 const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
 const dotenv = require('dotenv');
-dotenv.config();
+var cookieParser = require('cookie-parser');
 
+dotenv.config();
+app.use(cookieParser());
 const app = express();
 app.use(bodyParser.json());
 
