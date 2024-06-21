@@ -167,7 +167,7 @@ router.get('/callback', async (req, res) => {
         console.log('User Profile Inserted:', userDoc);
       }
 
-      res.redirect(`http://localhost:3001/`);
+      res.redirect(`${process.env.FRONTEND_URL}`);
     } catch (dbError) {
       console.error('Database error:', dbError);
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
