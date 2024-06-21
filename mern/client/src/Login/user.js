@@ -13,6 +13,7 @@ const User = () => {
   const [sortOption, setSortOption] = useState('newest');
   const playlistsPerPage = 16;
   const [showPopup, setShowPopup] = useState(false); 
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchUserProfile = async () => {
     try {
