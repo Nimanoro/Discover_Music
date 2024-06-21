@@ -7,12 +7,14 @@ import colorfulHeadphones from './images/colorfulheadphones.png';
 const Home = () =>{
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     // Check if user is logged in by making a request to the backend
     const checkLoginStatus = async () => {
       try {
-        const response = await fetch('http://localhost:2800/api/user', {
+        const response = await fetch(`${API_URL}/api/user`, {
           credentials: 'include' // Ensure cookies are included in the request
         });
         if (response.ok) {

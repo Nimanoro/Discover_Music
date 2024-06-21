@@ -4,6 +4,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './user.css';
 import SpotifyIcon from './images/spotify_icon_green.png';
 
+
 const User = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const User = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch('http://localhost:2800/api/user', {
+      const response = await fetch(`${API_URL}/api/user`, {
         credentials: 'include',
       });
 
@@ -169,7 +170,7 @@ const User = () => {
   const removePlaylist = async (playlistId) => {
     console.log(`Remove playlist ${playlistId}`);
     try {
-      const response = await fetch('http://localhost:2800/api/deletion', {
+      const response = await fetch(`${API_URL}/api/deletion`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
