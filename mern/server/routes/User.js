@@ -6,7 +6,7 @@ router.get('/api/user', async (req, res) => {
     const db_connect = dbo.getDb();
     const usersCollection = db_connect.collection('users');
   
-    const userId = req.session.userID;
+    const userId = req.headers['userID'];
   
     if (!userId) {
       return res.status(401).send('User not logged in');
