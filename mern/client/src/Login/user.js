@@ -20,7 +20,7 @@ const User = () => {
       const response = await fetch(`${API_URL}/api/user`, {
         credentials: 'include' // Ensure cookies are included in the request
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to fetch user data: ${errorText}`);
