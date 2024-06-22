@@ -14,11 +14,14 @@ const searchRouter = require('./routes/Search');
 const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
 const dotenv = require('dotenv');
 var cookieParser = require('cookie-parser');
-
+const fileURLToPath = require('url');
+console.log("my name is", __dirname);
 dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(session({
   secret: 'your_secret_key',
   resave: false,
@@ -51,7 +54,7 @@ app.use(searchRouter);
 app.use(express.static(path.join(__dirname, "../client/build")));
  
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
 });
 
 app.post("/api/logout", (req, res) => {

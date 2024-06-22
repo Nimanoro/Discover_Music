@@ -1,12 +1,10 @@
 import React from "react";
 import Navbar from "./Homepage_components/Navbar";
-import Database from "./Database/Database";
-import User from "./user.js";
+import User from "./Login/user";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./Homepage_components/Home.js";
 import First from "./Playlist/First.js";
 import { Helmet } from 'react-helmet';
-import PlaylistsPage from "./Playlist/PlaylistPage.js";
 
 export default function App() {
   return (
