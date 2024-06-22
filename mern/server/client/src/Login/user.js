@@ -13,11 +13,10 @@ const User = () => {
   const [sortOption, setSortOption] = useState('newest');
   const playlistsPerPage = 16;
   const [showPopup, setShowPopup] = useState(false); 
-  const API_URL = process.env.REACT_APP_API_URI;
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/user`, {
+      const response = await fetch(`/api/user`, {
         credentials: 'include' // Ensure cookies are included in the request
       });
 
@@ -171,7 +170,7 @@ const User = () => {
   const removePlaylist = async (playlistId) => {
     console.log(`Remove playlist ${playlistId}`);
     try {
-      const response = await fetch(`${API_URL}/api/deletion`, {
+      const response = await fetch(`/api/deletion`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

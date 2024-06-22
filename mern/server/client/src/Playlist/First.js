@@ -34,7 +34,7 @@ const First = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/user`, {
+        const response = await fetch(`/api/user`, {
           credentials: 'include',
         });
         if (!response.ok) {
@@ -100,7 +100,7 @@ const First = () => {
 
   const searchTracks = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/search-tracks?query=${encodeURIComponent(writtenAnswer)}`, {
+      const response = await fetch(`/api/search-tracks?query=${encodeURIComponent(writtenAnswer)}`, {
         credentials: 'include'
       });
       if (!response.ok) {
@@ -196,7 +196,7 @@ const First = () => {
 
   const getRecommendations = async (adjustedAverages) => {
     try {
-      const response = await fetch(`${API_URL}/api/recommendations`, {
+      const response = await fetch(`/api/recommendations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -221,7 +221,7 @@ const First = () => {
 
   const getRecommendationsPrem = async (adjustedAverages) => {
     try {
-      const response = await fetch(`${API_URL}//localhost:2800/api/recommendationsPrem`, {
+      const response = await fetch(`api/recommendationsPrem`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

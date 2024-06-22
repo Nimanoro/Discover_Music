@@ -21,7 +21,7 @@ const Navbar = () => {
 
     const checkLoginStatus = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/user`, {
+        const response = await fetch(`/api/user`, {
           credentials: 'include' // Ensure cookies are included in the request
         });
         if (response.ok) {
@@ -58,7 +58,7 @@ const Navbar = () => {
             <li><a 
               href="/"
               onClick={() => {
-                fetch(`${API_URL}/api/logout`, {
+                fetch(`/api/logout`, {
                   method: 'POST',
                   credentials: 'include'
                 }).then(() => {
