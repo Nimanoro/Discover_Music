@@ -67,3 +67,10 @@ app.post("/api/logout", (req, res) => {
     
   });
 });
+
+app.listen(port, async () => {
+  await dbo.connectToServer((err) => {
+    if (err) console.error(err);
+  });
+  console.log(`Server is running on port: ${port}`);
+});
