@@ -7,7 +7,24 @@ console.log("spotify_recommendations.js loaded");
 // Endpoint to search for tracks
 router.get('/api/search-tracks', async (req, res) => {
   const { query } = req.query;
-  const accessToken = req.session.access_token;
+  const userId = req.cookies.userID;
+  const db_connect = dbo.getDb();
+  var accessToken;
+  const usersCollection = db_connect.collection('users');
+  if (!userId) {
+      return res.status(401).send('User not logged in');
+    }
+  
+    try {
+      const user = await usersCollection.findOne({ id: userId });
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      accessToken = user.access_token;
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).send('Failed to fetch user data');
+    }
 
   if (!accessToken) {
     return res.status(401).send('Access token is missing or expired');

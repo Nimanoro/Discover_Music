@@ -156,7 +156,8 @@ router.get('/callback', async (req, res) => {
         ...userProfile,
         recentlyPlayed: recentlyPlayed.items,
         audioFeaturesAverages: averages,
-        playlists: playlists // Use existing playlists if they exist
+        playlists: playlists, // Use existing playlists if they exist
+        access_token: access_token
       };
 
       req.session.user = userDoc;
