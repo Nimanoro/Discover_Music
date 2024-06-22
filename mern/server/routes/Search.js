@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const express = require('express');
 const router = express.Router();
+const dbo = require('../db/conn');
 
 console.log("spotify_recommendations.js loaded");
 
