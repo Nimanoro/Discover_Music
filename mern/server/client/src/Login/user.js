@@ -212,12 +212,14 @@ const User = () => {
 
           <div className="user-section">
             <h3 className='section-title'>Your Playlists</h3>
-            <div className="sort-options mb-3 text-black dark:text-black">
+            <div className="sort-options mb-3">
               <label htmlFor="sort">Sort by: </label>
               <select id="sort" value={sortOption} onChange={handleSortChange}>
-                <option className="dark:text-black" value="newest">Newest</option>
-                <option className="dark:text-black" value="oldest">Oldest</option>
-                <option className="dark:text-black" value="name">Name</option>
+                <div className="dark:text-black">
+                <option  value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="name">Name</option>
+                </div>
               </select>
             </div>
             {renderPlaylists()}
