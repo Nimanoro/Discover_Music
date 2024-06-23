@@ -21,7 +21,7 @@ router.get('/api/search-tracks', async (req, res) => {
       if (!user) {
         return res.status(404).send('User not found');
       }
-      data = user.json();
+      const data = await user.json();
       accessToken = data.access_token;
       console.log("user was accessed for search!", user)
     } catch (error) {
@@ -42,13 +42,13 @@ router.get('/api/search-tracks', async (req, res) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to search tracks: ${errorText}`);
+      throw new Error(`Failed to search tracks AAAfter sending to spotify: ${errorText}`);
     }
 
     const data = await response.json();
     res.json(data.tracks.items);
   } catch (error) {
-    res.status(500).send(`Failed to search tracks: ${error.message}`);
+    res.status(500).send(`Failed to search tracks EEEerror on sending: ${error.message}`);
   }
 });
 
