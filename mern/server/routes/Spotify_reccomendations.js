@@ -37,7 +37,7 @@ router.post('/api/recommendations', async (req, res) => {
   if (!accessToken) {
     return res.status(401).send('Access token is missing or expired');
   }
-  
+
   console.log('Access Token:', accessToken);
 
   if (!accessToken) {
@@ -90,7 +90,6 @@ router.post('/api/recommendations', async (req, res) => {
     }
     console.log(user_mood);
 
-    const userId = req.session.userID;
     const createPlaylistResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
       method: 'POST',
       headers: {
