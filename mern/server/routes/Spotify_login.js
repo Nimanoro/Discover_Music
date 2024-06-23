@@ -171,7 +171,7 @@ router.get('/callback', async (req, res) => {
       }
       
       res.cookie('userID', userProfile.id, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'none' });
-      res.redirect(`https://discover-music-1.onrender.com/`);
+      res.redirect(`https://discover-music.onrender.com/`);
     } catch (dbError) {
       console.error('Database error:', dbError);
       res.status(500).send(`Failed to save data to database: ${dbError.message}`);
