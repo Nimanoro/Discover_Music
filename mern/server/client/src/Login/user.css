@@ -214,7 +214,7 @@
   opacity: 0;
 }
 .dark .sort-options select option{
-  color: black;
+  color: black !important;
 }
 
 
