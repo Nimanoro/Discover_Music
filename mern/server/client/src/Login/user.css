@@ -275,8 +275,8 @@
 
 @media (max-width: 576px) {
   .playlist-grid {
-    grid-template-columns: repeat(1, 1fr);
-    gap: 5px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
   }
 
   .recently-played-grid {
