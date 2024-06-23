@@ -10,7 +10,7 @@ router.get('/api/search-tracks', async (req, res) => {
   const { query } = req.query;
   const userId = req.cookies.userID;
   const db_connect = dbo.getDb();
-  var accessToken;
+  let accessToken;
   const usersCollection = db_connect.collection('users');
   if (!userId) {
       return res.status(401).send('User not logged in');
