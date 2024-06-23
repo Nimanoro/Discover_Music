@@ -62,10 +62,15 @@ app.post("/api/logout", (req, res) => {
     if (err) {
       return res.status(500).send('Failed to log out');
     }
-    res.clearCookie('connect.sid', { path: '/' });
-    res.sendStatus(200);
-    
+    res.cookie('token', 'none', {
+      expires: new Date(Date.now() + 5 * 1000),
+      httpOnly: true,
+  })
+  res
+      .status(200)
+      .json({ success: true, message: 'User logged out successfully' })
   });
+    
 });
 
 app.listen(port, async () => {
