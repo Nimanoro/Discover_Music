@@ -21,12 +21,11 @@ router.get('/api/search-tracks', async (req, res) => {
       if (!user) {
         return res.status(404).send('User not found');
       }
-      const data = await user.json();
-      accessToken = data.access_token;
+      accessToken = user.access_token;
       console.log("user was accessed for search!", user)
     } catch (error) {
       console.error('Error fetching user data:', error);
-      res.status(500).send('Failed to fetch user data');
+      return res.status(500).send('Failed to fetch user data');
     }
 
   if (!accessToken) {
