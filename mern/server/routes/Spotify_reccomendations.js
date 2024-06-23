@@ -7,13 +7,36 @@ console.log("spotify_recommendations.js loaded");
 
 // Function to validate averages
 // Endpoint to get recommendations
+const userId = req.cookies.userID;
+  const db_connect = dbo.getDb();
+  let accessToken;
+  const usersCollection = db_connect.collection('users');
+  if (!userId) {
+      return res.status(401).send('User not logged in');
+    }
+  
+    try {
+      const user = await usersCollection.findOne({ id: userId });
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      accessToken = user.access_token;
+      console.log("user was accessed for search!", user)
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      return res.status(500).send('Failed to fetch user data');
+    }
+
+  if (!accessToken) {
+    return res.status(401).send('Access token is missing or expired');
+  }
+
 router.post('/api/recommendations', async (req, res) => {
   const { adjustedAverages, seedTrack, user_mood } = req.body;
   console.log('Adjusted Averages:', adjustedAverages);
   console.log('Seed Track:', seedTrack);
   console.log('User Mood:', user_mood);
 
-  const accessToken = req.session.access_token;
   console.log('Access Token:', accessToken);
 
   if (!accessToken) {
