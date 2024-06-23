@@ -62,7 +62,7 @@ app.post("/api/logout", (req, res) => {
     if (err) {
       return res.status(500).send('Failed to log out');
     }
-    res.cookie('token', 'none', {
+    res.cookie('userID', 'none', {
       expires: new Date(Date.now() + 5 * 1000),
       httpOnly: true,
   })
