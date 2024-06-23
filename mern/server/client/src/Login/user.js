@@ -215,11 +215,9 @@ const User = () => {
             <div className="sort-options mb-3">
               <label htmlFor="sort">Sort by: </label>
               <select id="sort" value={sortOption} onChange={handleSortChange}>
-                <div className="dark:text-black">
                 <option  value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
                 <option value="name">Name</option>
-                </div>
               </select>
             </div>
             {renderPlaylists()}
