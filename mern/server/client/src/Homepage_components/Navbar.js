@@ -69,7 +69,7 @@ const Navbar = () => {
             >Logout</a></li>
           </>
         ) : (
-          <li><a href={uri}>Login</a></li>
+          <li><a on onClick={window.open(uri, "_blank")}>Login</a></li>
         )}
         <li>
           <button
