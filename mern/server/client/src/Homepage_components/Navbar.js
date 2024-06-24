@@ -90,7 +90,7 @@ const Navbar = () => {
             <svg
               id="theme-toggle-light-icon"
               className="hidden w-5 h-5"
-              fill="currentColor"
+              fill="white"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
