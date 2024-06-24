@@ -243,7 +243,7 @@ const First = () => {
       setError(error.message);
     }
   };
-
+  const isWrittenQuestion = questions[activeQuestion].type === 'written';
   const addLeadingZero = (number) => (number > 9 ? number : `0${number}`);
 
   if (loading) {
@@ -328,7 +328,7 @@ const First = () => {
             </div>
           )}
           <div className='flex-right ml-5'>
-          {questions[activeQuestion].type !== 'written' (
+          {!isWrittenQuestion && (
             <button onClick={onClickSkip}>
               Skip
             </button>
