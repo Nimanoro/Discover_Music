@@ -328,9 +328,11 @@ const First = () => {
             </div>
           )}
           <div className='flex-right ml-5'>
+          {type != "written" && (
             <button onClick={onClickSkip}>
               Skip
             </button>
+          )}
             <button onClick={onClickNext} disabled={selectedAnswerIndex === null && writtenAnswer === ''}>
               {activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
             </button>
