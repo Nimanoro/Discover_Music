@@ -328,7 +328,7 @@ const First = () => {
             </div>
           )}
           <div className='flex-right ml-5'>
-          {!isWrittenQuestion && (
+          {questions[activeQuestion].type == "MCQs" && (
             <button onClick={onClickSkip}>
               Skip
             </button>
