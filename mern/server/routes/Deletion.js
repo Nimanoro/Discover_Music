@@ -5,7 +5,26 @@ const dbo = require('../db/conn');
 
 router.delete('/api/deletion', async (req, res) => {
   const { playlistId } = req.body;
-  const accessToken = req.session.access_token;
+  const userId = req.cookies.userID;
+  const db_connect = dbo.getDb();
+  let accessToken;
+  const usersCollection = db_connect.collection('users');
+  if (!userId) {
+      return res.status(401).send('User not logged in');
+    }
+  
+    try {
+      const user = await usersCollection.findOne({ id: userId });
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      accessToken = user.access_token;
+      console.log("user was accessed for search!", user)
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      return res.status(500).send('Failed to fetch user data');
+    }
+
   console.log('Access Token:', accessToken);
 
   if (!accessToken) {
