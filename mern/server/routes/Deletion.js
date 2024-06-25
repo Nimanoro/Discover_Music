@@ -25,12 +25,10 @@ router.delete('/api/deletion', async (req, res) => {
       return res.status(500).send('Failed to fetch user data');
     }
 
-  console.log('Access Token:', accessToken);
-
   if (!accessToken) {
-    console.error('Access token is missing or expired');
     return res.status(401).send('Access token is missing or expired');
   }
+
 
   try {
     const url = `https://api.spotify.com/v1/playlists/${playlistId}/followers`;
