@@ -51,10 +51,6 @@ router.delete('/api/deletion', async (req, res) => {
     }
 
     // Update the database to reflect the deletion if necessary
-    const db_connect = dbo.getDb();
-    const usersCollection = db_connect.collection('users');
-    const userId = req.cookies.userID;
-
     await usersCollection.updateOne(
       { id: userId },
       { $pull: { playlists: { id: playlistId } } }
