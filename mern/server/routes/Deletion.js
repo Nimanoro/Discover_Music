@@ -29,7 +29,7 @@ router.delete('/api/deletion', async (req, res) => {
     return res.status(401).send('Access token is missing or expired');
   }
 
-
+  
   try {
     const url = `https://api.spotify.com/v1/playlists/${playlistId}/followers`;
 
@@ -45,11 +45,13 @@ router.delete('/api/deletion', async (req, res) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Error deleting the playlist:', errorText);
-      throw new Error(`Failed to delete playlist: ${errorText}`);
+      throw new Error(`Failed to delete playlist response not okay: ${errorText}`);
     }
 
     // Update the database to reflect the deletion if necessary
-    await usersCollection.updateOne(
+    const db_connect1 = dbo.getDb();
+    const usersCollection1 = db_connect1.collection('users');
+    await usersCollection1.updateOne(
       { id: userId },
       { $pull: { playlists: { id: playlistId } } }
     );
