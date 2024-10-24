@@ -119,7 +119,7 @@ router.get('/callback', async (req, res) => {
         return res.status(500).send('Failed to parse user profile data');
       }
 
-      
+      const usersCollection = db_connect.collection('users');
       if (userProfile.display_name == "Discover Music") {
 
         let averagesD = {
@@ -138,7 +138,7 @@ router.get('/callback', async (req, res) => {
         
         req.session.user = userDocMusic;
         req.session.userID = userProfile.id;
-        const usersCollectionD = db_connect.collection('users');
+        
         const existingUserD = await usersCollection.findOne({ id: userProfile.id });
         let playlistsD = [];
         if (existingUserD) {
@@ -185,27 +185,14 @@ router.get('/callback', async (req, res) => {
         return res.status(500).send('Failed to parse recently played tracks data');
       }
 
-      let trackIds = []
-      let averages = {
-        danceability: 0,
-        energy: 0,
-        key: 0,
-        loudness: 0,
-        mode: 0,
-        speechiness: 0,
-        acousticness: 0,
-        instrumentalness: 0,
-        liveness: 0,
-        valence: 0,
-        tempo: 0
-      };
       if (recentlyPlayed != Null) {
-          trackIds = recentlyPlayed.items.map(item => item.track.id);
-          audioFeatures = await fetchAudioFeatures(access_token, trackIds);
+          const trackIds = recentlyPlayed.items.map(item => item.track.id);
+          const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
 
-          averages = calculateAverages(audioFeatures);
+          const averages = calculateAverages(audioFeatures);
       }
-      const usersCollection = db_connect.collection('users');
+
+
       const existingUser = await usersCollection.findOne({ id: userProfile.id });
       let playlists = [];
       if (existingUser) {
