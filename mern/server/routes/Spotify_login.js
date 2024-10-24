@@ -119,10 +119,7 @@ router.get('/callback', async (req, res) => {
         return res.status(500).send('Failed to parse user profile data');
       }
 
-      let playlists = [];
-      if (existingUser) {
-        playlists = existingUser.playlists || [];
-      }
+      
       if (userProfile.display_name == "Discover Music") {
 
         let averagesD = {
@@ -138,17 +135,24 @@ router.get('/callback', async (req, res) => {
           valence: 0,
           tempo: 0
         };
-        const userDocMusic = {
-          ...userProfile,
-          recentlyPlayed: [],
-          audioFeaturesAverages: averagesD,
-          playlists: playlists,
-          access_token: access_token
-        };
+        
         req.session.user = userDocMusic;
         req.session.userID = userProfile.id;
         const usersCollectionD = db_connect.collection('users');
         const existingUserD = await usersCollection.findOne({ id: userProfile.id });
+        let playlistsD = [];
+        if (existingUserD) {
+          playlistsD = existingUserD.playlists || [];
+        }
+
+        const userDocMusic = {
+          ...userProfile,
+          recentlyPlayed: [],
+          audioFeaturesAverages: averagesD,
+          playlists: playlistsD,
+          access_token: access_token
+        };
+        
         if (existingUserD) {
           await usersCollection.updateOne({ id: userProfile.id }, { $set: userDoc });
           console.log('User Profile Updated:', userDoc);
@@ -203,7 +207,10 @@ router.get('/callback', async (req, res) => {
       }
       const usersCollection = db_connect.collection('users');
       const existingUser = await usersCollection.findOne({ id: userProfile.id });
-
+      let playlists = [];
+      if (existingUser) {
+        playlists = existingUser.playlists || [];
+      }
       
 
       const userDoc = {
