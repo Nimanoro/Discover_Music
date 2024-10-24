@@ -71,14 +71,14 @@ const User = () => {
       <div className="playlist-grid mb-5">
         {currentPlaylists.map(playlist => (
           <div key={playlist.id} className="playlist-item">
-            <div className="playlist-image-container playlist-buttons">
+            <div className="playlist-image-container">
               {playlist.image ? (
                 <img src={playlist.image} alt={playlist.name} className="playlist-image" />
               ) : (
                 <img src="default_image_url" alt="Default" className="playlist-image" />
               )}
             </div>
-            <div>
+            <div className="playlist-buttons">
               <button 
                 className="btn-play"
                 type="button"

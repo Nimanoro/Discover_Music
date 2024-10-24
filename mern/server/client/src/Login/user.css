@@ -213,6 +213,9 @@
 .playlist-item:hover .playlist-title {
   opacity: 0;
 }
+.playlist-item:hover .playlist-buttons {
+  opacity: 1;
+}
 .dark .sort-options select{
   color: black !important;
 }
