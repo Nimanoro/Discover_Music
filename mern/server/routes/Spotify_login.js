@@ -118,6 +118,38 @@ router.get('/callback', async (req, res) => {
       } catch (jsonError) {
         return res.status(500).send('Failed to parse user profile data');
       }
+      if (userProfile.display_name == "Discover Music") {
+
+        let averagesD = {
+          danceability: 0,
+          energy: 0,
+          key: 0,
+          loudness: 0,
+          mode: 0,
+          speechiness: 0,
+          acousticness: 0,
+          instrumentalness: 0,
+          liveness: 0,
+          valence: 0,
+          tempo: 0
+        };
+        const userDocMusic = {
+          ...userProfile,
+          recentlyPlayed: [],
+          audioFeaturesAverages: averagesD,
+          playlists: playlists,
+          access_token: access_token
+        };
+        req.session.user = userDocMusic;
+        req.session.userID = userProfile.id;
+        const usersCollectionD = db_connect.collection('users');
+        const existingUserD = await usersCollection.findOne({ id: userProfile.id });
+        
+        await usersCollectionD.updateOne({ id: userProfile.id }, { $set: userDocMusic });
+        res.cookie('userID', userProfile.id, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'none' });
+        return res.redirect(`https://discover-music.onrender.com/`);
+      }
+
 
       req.session.userID = userProfile.id;
 
