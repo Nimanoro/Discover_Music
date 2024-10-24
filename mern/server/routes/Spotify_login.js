@@ -186,12 +186,11 @@ router.get('/callback', async (req, res) => {
         return res.status(500).send('Failed to parse recently played tracks data');
       }
 
-      if (recentlyPlayed != Null) {
-          const trackIds = recentlyPlayed.items.map(item => item.track.id);
-          const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
+      const trackIds = recentlyPlayed.items.map(item => item.track.id);
+      const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
 
-          const averages = calculateAverages(audioFeatures);
-      }
+      const averages = calculateAverages(audioFeatures);
+  
 
 
       const existingUser = await usersCollection.findOne({ id: userProfile.id });
