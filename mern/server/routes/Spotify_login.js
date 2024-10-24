@@ -149,8 +149,13 @@ router.get('/callback', async (req, res) => {
         req.session.userID = userProfile.id;
         const usersCollectionD = db_connect.collection('users');
         const existingUserD = await usersCollection.findOne({ id: userProfile.id });
-        
-        await usersCollectionD.updateOne({ id: userProfile.id }, { $set: userDocMusic });
+        if (existingUserD) {
+          await usersCollection.updateOne({ id: userProfile.id }, { $set: userDoc });
+          console.log('User Profile Updated:', userDoc);
+        } else {
+          await usersCollectionD.insertOne(userDoc);
+          console.log('User Profile Inserted:', userDoc);
+        }
         res.cookie('userID', userProfile.id, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'none' });
         return res.redirect(`https://discover-music.onrender.com/`);
       }
