@@ -118,6 +118,11 @@ router.get('/callback', async (req, res) => {
       } catch (jsonError) {
         return res.status(500).send('Failed to parse user profile data');
       }
+
+      let playlists = [];
+      if (existingUser) {
+        playlists = existingUser.playlists || [];
+      }
       if (userProfile.display_name == "Discover Music") {
 
         let averagesD = {
@@ -194,10 +199,7 @@ router.get('/callback', async (req, res) => {
       const usersCollection = db_connect.collection('users');
       const existingUser = await usersCollection.findOne({ id: userProfile.id });
 
-      let playlists = [];
-      if (existingUser) {
-        playlists = existingUser.playlists || [];
-      }
+      
 
       const userDoc = {
         ...userProfile,
