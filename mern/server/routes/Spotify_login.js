@@ -26,7 +26,7 @@ const fetchAudioFeatures = async (accessToken, trackIds) => {
   }
 
   const data = await response.json();
-  return data.audio_features; // Ensure this is an array
+  return data.audio_features; 
 };
 
 const calculateAverages = (audioFeatures) => {
@@ -139,11 +139,26 @@ router.get('/callback', async (req, res) => {
         return res.status(500).send('Failed to parse recently played tracks data');
       }
 
-      const trackIds = recentlyPlayed.items.map(item => item.track.id);
-      const audioFeatures = await fetchAudioFeatures(access_token, trackIds);
+      let trackIds = []
+      let averages = {
+        danceability: 0,
+        energy: 0,
+        key: 0,
+        loudness: 0,
+        mode: 0,
+        speechiness: 0,
+        acousticness: 0,
+        instrumentalness: 0,
+        liveness: 0,
+        valence: 0,
+        tempo: 0
+      };
+      if (recentlyPlayed != Null) {
+          trackIds = recentlyPlayed.items.map(item => item.track.id);
+          audioFeatures = await fetchAudioFeatures(access_token, trackIds);
 
-      const averages = calculateAverages(audioFeatures);
-
+          averages = calculateAverages(audioFeatures);
+      }
       const usersCollection = db_connect.collection('users');
       const existingUser = await usersCollection.findOne({ id: userProfile.id });
 
@@ -156,7 +171,7 @@ router.get('/callback', async (req, res) => {
         ...userProfile,
         recentlyPlayed: recentlyPlayed.items,
         audioFeaturesAverages: averages,
-        playlists: playlists, // Use existing playlists if they exist
+        playlists: playlists,
         access_token: access_token
       };
 
