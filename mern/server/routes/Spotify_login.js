@@ -140,6 +140,8 @@ router.get('/callback', async (req, res) => {
         req.session.userID = userProfile.id;
         
         const existingUserD = await usersCollection.findOne({ id: userProfile.id });
+        
+        
         let playlistsD = [];
         if (existingUserD) {
           playlistsD = existingUserD.playlists || [];
@@ -154,7 +156,7 @@ router.get('/callback', async (req, res) => {
         };
         
         if (existingUserD) {
-          await usersCollection.updateOne({ id: userProfile.id }, { $set: userDoc });
+          await usersCollection.updateOne({ id: userProfile.id }, { $set: userDocMusic });
           console.log('User Profile Updated:', userDoc);
         } else {
           await usersCollectionD.insertOne(userDoc);
