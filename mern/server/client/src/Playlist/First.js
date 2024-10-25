@@ -113,6 +113,17 @@ const First = () => {
     }
   };
 
+  const getSelectedTrackFeatures = async () => {
+    try {
+      const response = await fetch(`/api/audio-features?trackId=${selectedTrack.id}`, {
+        credentials: 'include'
+      });
+      return response.json();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const selectTrack = (track) => {
     setSelectedTrack(track);
     setSearchResults([]);

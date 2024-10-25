@@ -6,6 +6,7 @@ const deleteRouter = require('./routes/Deletion');
 const bodyParser = require('body-parser');
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 2800;
+const fetchAudioAverages = require('./routes/fetchAudioAverages.js');
 const spotifyLogin = require("./routes/Spotify_login");
 const recommendationsRouter = require('./routes/Spotify_reccomendations')
 const dbo = require("./db/conn");
@@ -48,6 +49,7 @@ app.use(userRouter);
 
 app.use(recommendationsRouter);
 app.use(searchRouter);
+app.use(fetchAudioAverages);
 
 
 // Serve static files from the React app
