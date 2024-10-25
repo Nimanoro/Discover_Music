@@ -130,7 +130,10 @@ const First = () => {
     console.log(userResponses);
 
 
-    let newAverages = { ...averages };
+    let song_avg = selectedTrack ? selectedTrack.audio_features : null;
+    const newAverages = averages.map((avg, index) => avg * 0.6 + song_avg[index] * 0.4);
+
+
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
@@ -146,10 +149,12 @@ const First = () => {
       user_mood.mood = 'Happy';
     } else if (userResponses.mood === 'Sad') {
       newAverages.valence -= 0.2;
+      nwqAverages.energy -= 0.1;
       user_mood.mood = 'Sad';
     } else if (userResponses.mood=== 'Stressed') {
       newAverages.energy -= 0.3;
-      newAverages.valence += 0.1;
+      newAverages.valence += 0.2;
+      newAverages.
       newAverages.tempo -= 10;
       user_mood.mood = 'Stressed';
     }
