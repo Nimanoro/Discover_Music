@@ -149,7 +149,7 @@ const First = () => {
       user_mood.mood = 'Happy';
     } else if (userResponses.mood === 'Sad') {
       newAverages.valence -= 0.2;
-      nwqAverages.energy -= 0.1;
+      newAverages.energy -= 0.1;
       user_mood.mood = 'Sad';
     } else if (userResponses.mood=== 'Stressed') {
       newAverages.energy -= 0.3;
