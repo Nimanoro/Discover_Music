@@ -1,3 +1,7 @@
+const fetch = require('node-fetch');
+const express = require('express');
+const router = express.Router();
+const dbo = require('../db/conn');
 router.get(`/api/audio-features`, async (req, res) => {
     const {trackIds} = req.query;
     const userId = req.cookies.userID;
