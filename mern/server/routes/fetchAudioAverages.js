@@ -46,4 +46,4 @@ router.get(`/api/audio-features`, async (req, res) => {
         res.status(500).send(`Failed to find features EEEerror on sending: ${error.message}`);
       }
 });
-    
+module.exports = router;
