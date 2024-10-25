@@ -131,9 +131,12 @@ const First = () => {
 
 
     let song_avg = selectedTrack ? selectedTrack.audio_features : null;
-    const newAverages = averages.map((avg, index) => avg * 0.6 + song_avg[index] * 0.4);
-
-
+    let newAverages = { ...averages };
+    if (song_avg != null) {
+      newAverages = averages.map((avg, index) => avg * 0.6 + song_avg[index] * 0.4);
+    } else {
+      newAverages = { ...averages }
+    }
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
