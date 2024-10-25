@@ -129,9 +129,9 @@ const First = () => {
 
   const selectTrack = (track) => {
     setSelectedTrack(track);
-    getSelectedTrackFeatures();
     setSearchResults([]);
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
+    getSelectedTrackFeatures();
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
   const adjustAverages = () => {
