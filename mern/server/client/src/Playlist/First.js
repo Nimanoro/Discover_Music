@@ -24,6 +24,7 @@ const First = () => {
   const [playlistDetails, setPlaylistDetails] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [selectedSongFeature, setSelectedSongFeature] = useState(null);
   const startQuiz = () => {
     setQuizStarted(true);
   };
@@ -108,6 +109,7 @@ const First = () => {
       }
       const data = await response.json();
       setSearchResults(data);
+      
     } catch (error) {
       setError(error.message);
     }
@@ -118,7 +120,8 @@ const First = () => {
       const response = await fetch(`/api/audio-features?trackId=${selectedTrack.id}`, {
         credentials: 'include'
       });
-      return response.json();
+      const data = await response.json();
+      setSelectedSongFeature(data);
     } catch (error) {
       setError(error.message);
     }
@@ -126,6 +129,7 @@ const First = () => {
 
   const selectTrack = (track) => {
     setSelectedTrack(track);
+    getSelectedTrackFeatures();
     setSearchResults([]);
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
   };
@@ -139,15 +143,16 @@ const First = () => {
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
     console.log(userResponses);
-
-
-    let song_avg = selectedTrack ? selectedTrack.audio_features : null;
     let newAverages = { ...averages };
-    if (song_avg != null) {
-      newAverages = averages.map((avg, index) => avg * 0.6 + song_avg[index] * 0.4);
-    } else {
-      newAverages = { ...averages }
-    }
+  const baseAverages  = () => {
+      ;
+      if (selectedSongFeature != null) {
+        newAverages = averages.map((avg, index) => avg * 0.6 + selectedSongFeature[index] * 0.4);
+      } else {
+        newAverages = { ...averages }
+      }
+    };
+    baseAverages();
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
@@ -347,7 +352,7 @@ const First = () => {
             </div>
           )}
           <div className='flex-right ml-5'>
-          {questions[activeQuestion].type == "MCQs" && (
+          {questions[activeQuestion].type === "MCQs" && (
             <button onClick={onClickSkip}>
               Skip
             </button>
