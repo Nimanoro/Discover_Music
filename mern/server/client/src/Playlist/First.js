@@ -66,6 +66,7 @@ const First = () => {
   const onClickNext = () => {
     if (type === 'Written') {
       setSelectedAnswer(writtenAnswer);
+      getSelectedTrackFeatures();
     }
     setSelectedAnswerIndex(null);
     setWrittenAnswer('');
@@ -131,7 +132,6 @@ const First = () => {
     setSelectedTrack(track);
     setSearchResults([]);
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
-    getSelectedTrackFeatures();
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
   const adjustAverages = () => {
