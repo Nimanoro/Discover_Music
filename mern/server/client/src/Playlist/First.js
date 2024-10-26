@@ -119,6 +119,10 @@ const First = () => {
 
   const getSelectedTrackFeatures = async () => {
     try {
+      if (!selectedTrack) {
+        throw new Error('No track selected');
+
+      }
       const response = await fetch(`/api/audio-features?query=${selectedTrack.id}`, {
         credentials: 'include'
       });
@@ -126,6 +130,7 @@ const First = () => {
       console.log(response);
       const data = await response.json();
       setSelectedSongFeature(data);
+      baseAverages();
       return data;
     } catch (error) {
       setError(error.message);
@@ -140,6 +145,15 @@ const First = () => {
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
+  let newAverages = { ...averages };
+  const baseAverages  = () => {
+    ;
+    if (selectedSongFeature != null) {
+      newAverages = averages.map((avg, index) => avg * 0.6 + selectedSongFeature[index] * 0.4);
+    } else {
+      newAverages = { ...averages }
+    }
+  };
   const adjustAverages = () => {
     const userResponses = {
       premium: false,
@@ -148,17 +162,8 @@ const First = () => {
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
-    console.log(userResponses);
-    let newAverages = { ...averages };
-  const baseAverages  = () => {
-      ;
-      if (selectedSongFeature != null) {
-        newAverages = averages.map((avg, index) => avg * 0.6 + selectedSongFeature[index] * 0.4);
-      } else {
-        newAverages = { ...averages }
-      }
-    };
-    baseAverages();
+  
+  
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
