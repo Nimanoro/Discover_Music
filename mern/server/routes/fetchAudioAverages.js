@@ -18,9 +18,7 @@ router.get(`/api/audio-features`, async (req, res) => {
             return res.status(404).send('User not found');
         }
         accessToken = user.access_token;
-        console.log("user was accessed for search!", user)
         } catch (error) {
-        console.error('Error fetching user data:', error);
         return res.status(500).send('Failed to fetch user data');
         }
 
@@ -28,7 +26,7 @@ router.get(`/api/audio-features`, async (req, res) => {
         return res.status(401).send('Access token is missing or expired');
     }
     try {
-        const response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackId}`, {
+        const response = await fetch(`https://api.spotify.com/v1/audio-features?id=${trackId}`, {
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
