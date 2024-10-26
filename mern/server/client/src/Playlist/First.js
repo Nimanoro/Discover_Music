@@ -187,7 +187,7 @@ const First = () => {
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
-    newAverages = baseAverages();
+    let newAverages = baseAverages();
 
   
 
