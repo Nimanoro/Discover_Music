@@ -108,7 +108,6 @@ const First = () => {
       if (!response.ok) {
         throw new Error('Failed to search tracks');
       }
-      console.log(response);
       const data = await response.json();
       setSearchResults(data);
       
@@ -122,6 +121,8 @@ const First = () => {
       const response = await fetch(`/api/audio-features?trackId=${selectedTrack.id}`, {
         credentials: 'include'
       });
+      console.log(selectedTrack.id);
+      console.log(response);
       const data = await response.json();
       setSelectedSongFeature(data);
     } catch (error) {
