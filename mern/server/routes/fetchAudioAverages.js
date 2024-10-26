@@ -65,7 +65,7 @@ router.get(`/api/audio-features`, async (req, res) => {
           totals.liveness = data.liveness;
           totals.valence = data.valence;
           totals.tempo = data.tempo;
-        res.status(200).send(totals);
+        res.json(totals);
     }
     catch (error) {
         res.status(500).send(`Failed to find features EEEerror on sending: ${error.message}`);
