@@ -63,10 +63,11 @@ const First = () => {
   const { questions } = Questions;
   const { question, choices, correctAnswer, type } = questions[activeQuestion];
 
-  const onClickNext = () => {
+  const onClickNext = async() => {
     if (type === 'Written') {
       setSelectedAnswer(writtenAnswer);
-      getSelectedTrackFeatures();
+      await getSelectedTrackFeatures();
+      console.log("selected song Features", selectedSongFeature);
     }
     setSelectedAnswerIndex(null);
     setWrittenAnswer('');
