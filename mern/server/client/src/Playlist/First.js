@@ -255,14 +255,14 @@ const First = () => {
     }
   };
 
-  const getRecommendations = async (adjustedAverages) => {
+  const getRecommendations = async (newAverages) => {
     try {
       const response = await fetch(`/api/recommendations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ adjustedAverages, seedTrack: selectedTrack ? selectedTrack.id : null , user_mood: user_mood}),
+        body: JSON.stringify({ newAverages, seedTrack: selectedTrack ? selectedTrack.id : null , user_mood: user_mood}),
         credentials: 'include'
       });
       if (!response.ok) {
