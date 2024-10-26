@@ -26,7 +26,7 @@ router.get(`/api/audio-features`, async (req, res) => {
         return res.status(401).send('Access token is missing or expired');
     }
     try {
-        const response = await fetch(`https://api.spotify.com/v1/audio-features?id=${trackId}`, {
+        const response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId}`, {
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
