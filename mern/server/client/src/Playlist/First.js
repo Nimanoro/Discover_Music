@@ -126,9 +126,12 @@ const First = () => {
       console.log(response);
       const data = await response.json();
       setSelectedSongFeature(data);
+      return data;
     } catch (error) {
       setError(error.message);
+      return null;
     }
+    
   };
 
   const selectTrack = (track) => {
