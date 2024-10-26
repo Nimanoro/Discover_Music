@@ -145,14 +145,15 @@ const First = () => {
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
-  let newAverages = { ...averages };
-  const baseAverages  = () => {
+  let newAverages;
+  const baseAverages  = (newAverages) => {
     ;
     if (selectedSongFeature != null) {
       newAverages = averages.map((avg, index) => avg * 0.6 + selectedSongFeature[index] * 0.4);
     } else {
       newAverages = { ...averages }
     }
+    return newAverages;
   };
   const adjustAverages = () => {
     const userResponses = {
@@ -162,7 +163,8 @@ const First = () => {
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
-  
+    newAverages = baseAverages();
+
   
 
     if (userResponses.mood === 'Energetic') {
