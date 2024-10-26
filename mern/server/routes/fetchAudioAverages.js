@@ -54,7 +54,17 @@ router.get(`/api/audio-features`, async (req, res) => {
             tempo: 0
           };
         
-          totals = { data.danceability, data.energy, data.key, data.loudness, data.mode, data.speechiness, data.acousticness, data.instrumentalness, data.liveness, data.valence, data.tempo };
+          totals.danceability = data.danceability;
+          totals.energy = data.energy;
+          totals.key = data.key;
+          totals.loudness = data.loudness;
+          totals.mode = data.mode;
+          totals.speechiness = data.speechiness;
+          totals.acousticness = data.acousticness;
+          totals.instrumentalness = data.instrumentalness;
+          totals.liveness = data.liveness;
+          totals.valence = data.valence;
+          totals.tempo = data.tempo;
         res.status(200).send(totals);
     }
     catch (error) {
