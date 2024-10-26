@@ -40,7 +40,7 @@ router.get(`/api/audio-features`, async (req, res) => {
           }
         
         const data = await response.json();
-        audioFeatures = data.audio_features;
+        const audioFeatures = data.audio_features;
 
         const totals = {
             danceability: 0,
