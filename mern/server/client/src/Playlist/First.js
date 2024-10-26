@@ -145,9 +145,21 @@ const First = () => {
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
-  let newAverages;
-  const baseAverages  = (newAverages) => {
-    ;
+  const baseAverages  = () => {
+    let newAverages = {
+      danceability: 0,
+      energy: 0,
+      key: 0,
+      loudness: 0,
+      mode: 0,
+      speechiness: 0,
+      acousticness: 0,
+      instrumentalness: 0,
+      liveness: 0,
+      valence: 0,
+      tempo: 0
+    }
+    console.log("selected song Features", selectedSongFeature);
     if (selectedSongFeature != null) {
       newAverages = {
         danceability: selectedSongFeature.danceability * 0.4 + averages.danceability * 0.6,
