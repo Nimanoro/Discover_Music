@@ -40,6 +40,8 @@ router.get(`/api/audio-features`, async (req, res) => {
           }
         
         const data = await response.json();
+        audioFeatures = data.audio_features;
+
         const totals = {
             danceability: 0,
             energy: 0,
@@ -54,17 +56,21 @@ router.get(`/api/audio-features`, async (req, res) => {
             tempo: 0
           };
         
-          totals.danceability = data.danceability;
-          totals.energy = data.energy;
-          totals.key = data.key;
-          totals.loudness = data.loudness;
-          totals.mode = data.mode;
-          totals.speechiness = data.speechiness;
-          totals.acousticness = data.acousticness;
-          totals.instrumentalness = data.instrumentalness;
-          totals.liveness = data.liveness;
-          totals.valence = data.valence;
-          totals.tempo = data.tempo;
+          audioFeatures.forEach(feature => {
+            totals.danceability += feature.danceability;
+            totals.energy += feature.energy;
+            totals.key += feature.key;
+            totals.loudness += feature.loudness;
+            totals.mode += feature.mode;
+            totals.speechiness += feature.speechiness;
+            totals.acousticness += feature.acousticness;
+            totals.instrumentalness += feature.instrumentalness;
+            totals.liveness += feature.liveness;
+            totals.valence += feature.valence;
+            totals.tempo += feature.tempo;
+        });
+
+
         res.json(totals);
     }
     catch (error) {
