@@ -108,6 +108,7 @@ const First = () => {
       if (!response.ok) {
         throw new Error('Failed to search tracks');
       }
+      console.log(response);
       const data = await response.json();
       setSearchResults(data);
       
