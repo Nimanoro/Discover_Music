@@ -25,7 +25,7 @@ router.get(`/api/audio-features`, async (req, res) => {
     if (!accessToken) {
         return res.status(401).send('Access token is missing or expired');
     }
-    try {
+    try { 
         const response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId}`, {
         headers: {
             'Authorization': `Bearer ${accessToken}`
@@ -38,7 +38,25 @@ router.get(`/api/audio-features`, async (req, res) => {
         }
 
         const data = await response.json();
-        return data.audio_features; 
+        if (!data) {
+        throw new Error('Failed to parse response from Spotify API');
+        }
+        const features = {
+            danceability: data.danceability,
+            energy: data.energy,
+            key: data.key,
+            loudness: data.loudness,
+            mode: data.mode,
+            speechiness: data.speechiness,
+            acousticness: data.acousticness,
+            instrumentalness: data.instrumentalness,
+            liveness: data.liveness,
+            valence: data.valence,
+            tempo: data.tempo,
+            duration_ms: data.duration_ms,
+            time_signature: data.time_signature
+        }
+        res.status(200).send(features);
     }
     catch (error) {
         res.status(500).send(`Failed to find features EEEerror on sending: ${error.message}`);
