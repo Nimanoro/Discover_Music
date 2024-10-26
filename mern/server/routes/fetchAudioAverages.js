@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const dbo = require('../db/conn');
 router.get(`/api/audio-features`, async (req, res) => {
-    const {trackIds} = req.query;
+    const {trackId} = req.query;
     const userId = req.cookies.userID;
     const db_connect = dbo.getDb();
     let accessToken;
@@ -28,7 +28,7 @@ router.get(`/api/audio-features`, async (req, res) => {
         return res.status(401).send('Access token is missing or expired');
     }
     try {
-        const response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds.join(',')}`, {
+        const response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackId}`, {
         headers: {
             'Authorization': `Bearer ${accessToken}`
         }
