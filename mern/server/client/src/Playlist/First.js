@@ -149,7 +149,19 @@ const First = () => {
   const baseAverages  = (newAverages) => {
     ;
     if (selectedSongFeature != null) {
-      newAverages = averages.map((avg, index) => avg * 0.6 + selectedSongFeature[index] * 0.4);
+      newAverages = {
+        danceability: selectedSongFeature.danceability * 0.4 + averages.danceability * 0.6,
+        energy: selectedSongFeature.energy * 0.4 + averages.energy * 0.6,
+        key: selectedSongFeature.key * 0.4 + averages.key * 0.6,
+        loudness: selectedSongFeature.loudness * 0.4 + averages.loudness * 0.6,
+        mode: selectedSongFeature.mode * 0.4 + averages.mode * 0.6,
+        speechiness: selectedSongFeature.speechiness * 0.4 + averages.speechiness * 0.6,
+        acousticness: selectedSongFeature.acousticness * 0.4 + averages.acousticness * 0.6,
+        instrumentalness: selectedSongFeature.instrumentalness * 0.4 + averages.instrumentalness * 0.6,
+        liveness: selectedSongFeature.liveness * 0.4 + averages.liveness * 0.6,
+        valence: selectedSongFeature.valence * 0.4 + averages.valence * 0.6,
+        tempo: selectedSongFeature.tempo * 0.4 + averages.tempo * 0.6
+      }
     } else {
       newAverages = { ...averages }
     }
