@@ -45,6 +45,7 @@ router.get(`/api/audio-features`, async (req, res) => {
   }
 
   const data = await response.json();
+  console.log("data: ", data);
   const audioFeatures = data.audio_features; // Array of audio features objects
   if (!Array.isArray(audioFeatures)) {
     return res.status(404).send('Audio features is not an array');
