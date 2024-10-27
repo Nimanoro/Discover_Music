@@ -31,7 +31,7 @@ router.get(`/api/audio-features`, async (req, res) => {
   let response;
   try {
     console.log("trackId: ", trackId);
-    response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId},`, {
+    response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
