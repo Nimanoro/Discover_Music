@@ -117,20 +117,14 @@ const First = () => {
     }
   };
 
-  const getSelectedTrackFeatures = async () => {
+   const getSelectedTrackFeatures = async () => {
     try {
-      if (!selectedTrack) {
-        throw new Error('No track selected');
-
-      }
-      const response = await fetch(`/api/audio-features?query=${selectedTrack.id}`, {
-        credentials: 'include'
+      if (!selectedTrack) return; // No selected track to fetch features
+      const response = await fetch(`${API_URL}/api/audio-features?query=${selectedTrack.id}`, {
+        credentials: 'include',
       });
-      console.log(selectedTrack.id);
-      console.log(response);
-      const data = await response.json();
-      setSelectedSongFeature(data);
-      baseAverages();
+      if (!response.ok) throw new Error('Failed to fetch track features');
+      setSelectedSongFeature(await response.json());
     } catch (error) {
       setError(error.message);
     }
@@ -142,40 +136,7 @@ const First = () => {
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
-  const baseAverages  = () => {
-    let newAverages = {
-      danceability: 0,
-      energy: 0,
-      key: 0,
-      loudness: 0,
-      mode: 0,
-      speechiness: 0,
-      acousticness: 0,
-      instrumentalness: 0,
-      liveness: 0,
-      valence: 0,
-      tempo: 0
-    }
-    console.log("selected song Features", selectedSongFeature);
-    if (selectedSongFeature != null) {
-      newAverages = {
-        danceability: selectedSongFeature.danceability * 0.4 + averages.danceability * 0.6,
-        energy: selectedSongFeature.energy * 0.4 + averages.energy * 0.6,
-        key: selectedSongFeature.key * 0.4 + averages.key * 0.6,
-        loudness: selectedSongFeature.loudness * 0.4 + averages.loudness * 0.6,
-        mode: selectedSongFeature.mode * 0.4 + averages.mode * 0.6,
-        speechiness: selectedSongFeature.speechiness * 0.4 + averages.speechiness * 0.6,
-        acousticness: selectedSongFeature.acousticness * 0.4 + averages.acousticness * 0.6,
-        instrumentalness: selectedSongFeature.instrumentalness * 0.4 + averages.instrumentalness * 0.6,
-        liveness: selectedSongFeature.liveness * 0.4 + averages.liveness * 0.6,
-        valence: selectedSongFeature.valence * 0.4 + averages.valence * 0.6,
-        tempo: selectedSongFeature.tempo * 0.4 + averages.tempo * 0.6
-      }
-    } else {
-      newAverages = { ...averages }
-    }
-    return newAverages;
-  };
+ 
   const adjustAverages = () => {
     const userResponses = {
       premium: false,
@@ -184,7 +145,23 @@ const First = () => {
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
-    let newAverages = baseAverages();
+      // Ensure averages and selectedSongFeature exist for calculation
+      if (!averages || !selectedSongFeature) return;
+  
+      let newAverages = {
+        danceability: averages.danceability * 0.6 + selectedSongFeature.danceability * 0.4,
+        energy: averages.energy * 0.6 + selectedSongFeature.energy * 0.4,
+        key: averages.key * 0.6 + selectedSongFeature.key * 0.4,
+        loudness: averages.loudness * 0.6 + selectedSongFeature.loudness * 0.4,
+        mode: averages.mode * 0.6 + selectedSongFeature.mode * 0.4,
+        speechiness: averages.speechiness * 0.6 + selectedSongFeature.speechiness * 0.4,
+        acousticness: averages.acousticness * 0.6 + selectedSongFeature.acousticness * 0.4,
+        instrumentalness: averages.instrumentalness * 0.6 + selectedSongFeature.instrumentalness * 0.4,
+        liveness: averages.liveness * 0.6 + selectedSongFeature.liveness * 0.4,
+        valence: averages.valence * 0.6 + selectedSongFeature.valence * 0.4,
+        tempo: averages.tempo * 0.6 + selectedSongFeature.tempo * 0.4,
+      };
+  
 
   
 
