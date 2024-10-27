@@ -60,7 +60,7 @@ router.get(`/api/audio-features`, async (req, res) => {
     mode: audioFeatures.mode,
   };
   
-  res.send(totals);
+  res.status(200).send(totals);
 });
 
 module.exports = router;
