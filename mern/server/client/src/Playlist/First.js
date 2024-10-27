@@ -120,7 +120,7 @@ const First = () => {
    const getSelectedTrackFeatures = async () => {
     try {
       if (!selectedTrack) return; // No selected track to fetch features
-      const response = await fetch(`${API_URL}/api/audio-features?query=${selectedTrack.id}`, {
+      const response = await fetch(`/api/audio-features?query=${selectedTrack.id}`, {
         credentials: 'include',
       });
       if (!response.ok) throw new Error('Failed to fetch track features');
