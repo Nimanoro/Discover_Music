@@ -24,6 +24,7 @@ const First = () => {
   const [playlistDetails, setPlaylistDetails] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [songFeatures, setSongFeatures] = useState(null);
   const startQuiz = () => {
     setQuizStarted(true);
   };
@@ -113,10 +114,27 @@ const First = () => {
     }
   };
 
+  const getSelectedFeatures = async () => {
+    try {
+      const response = await fetch(`/api/audio-features?query=${selectedTrack.id}`, {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to search tracks');
+      }
+      const data = await response.json();
+      setSongFeatures(data);
+      console.log("selected track features", songFeatures);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const selectTrack = (track) => {
     setSelectedTrack(track);
     setSearchResults([]);
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
+    getSelectedFeatures();
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
   const adjustAverages = () => {
