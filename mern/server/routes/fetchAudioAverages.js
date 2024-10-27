@@ -47,9 +47,20 @@ router.get(`/api/audio-features`, async (req, res) => {
 
   const audioFeatures = await response.json();
 
+  const totals = {
+    acousticness: audioFeatures.acousticness,
+    danceability: audioFeatures.danceability,
+    energy:  audioFeatures.energy,
+    instrumentalness: audioFeatures.instrumentalness,
+    liveness:   audioFeatures.liveness,
+    speechiness: audioFeatures.speechiness,
+    valence: audioFeatures.valence,
+    tempo: audioFeatures.tempo,
+    key: audioFeatures.key,
+    mode: audioFeatures.mode,
+  };
   
-  
-  res.send(audioFeatures);
+  res.send(totals);
 });
 
 module.exports = router;
