@@ -46,7 +46,7 @@ router.get(`/api/audio-features`, async (req, res) => {
 
   const data = await response.json();
   console.log("data: ", data);
-  const audioFeatures = data.audio_features; // Array of audio features objects
+  const audioFeatures = await data.audio_features; // Array of audio features objects
   if (!Array.isArray(audioFeatures)) {
     return res.status(404).send('Audio features is not an array');
   }
@@ -81,13 +81,7 @@ router.get(`/api/audio-features`, async (req, res) => {
       totals.tempo += feature.tempo;
     }
   });
-
-  const averages = {};
-  for (const key in totals) {
-    averages[key] = totals[key] / audioFeatures.length;
-  }
-
-  res.send(averages);
+  res.send(totals);
 });
 
 module.exports = router;
