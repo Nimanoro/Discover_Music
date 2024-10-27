@@ -40,10 +40,7 @@ router.get(`/api/audio-features`, async (req, res) => {
           }
         
         const data = await response.json();
-        const audioFeatures = data.audio_features.filter(feature => feature !== null);
-        if (audioFeatures.length === 0) {
-            return res.status(404).send('No audio features found');
-        }
+        const audioFeatures = data.audio_features;
 
         const totals = {
             danceability: 0,
