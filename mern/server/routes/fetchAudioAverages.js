@@ -30,7 +30,7 @@ router.get(`/api/audio-features`, async (req, res) => {
 
   let response;
   try {
-    response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackId}`, {
+    response = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackId},`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
@@ -65,6 +65,7 @@ router.get(`/api/audio-features`, async (req, res) => {
   };
 
   audioFeatures.forEach(feature => {
+    console.log("feature: ", feature);
     totals.danceability += feature.danceability;
     totals.energy += feature.energy;
     totals.key += feature.key;
