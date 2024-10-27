@@ -131,12 +131,9 @@ const First = () => {
       const data = await response.json();
       setSelectedSongFeature(data);
       baseAverages();
-      return data;
     } catch (error) {
       setError(error.message);
-      return null;
     }
-    
   };
 
   const selectTrack = (track) => {
@@ -271,7 +268,7 @@ const First = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ newAverages, seedTrack: selectedTrack ? selectedTrack.id : null , user_mood: user_mood}),
+        body: JSON.stringify({ newAverages, seedTrack: selectedTrack.id, user_mood: user_mood}),
         credentials: 'include'
       });
       if (!response.ok) {
