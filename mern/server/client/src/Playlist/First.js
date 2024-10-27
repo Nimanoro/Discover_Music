@@ -24,7 +24,6 @@ const First = () => {
   const [playlistDetails, setPlaylistDetails] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const [selectedSongFeature, setSelectedSongFeature] = useState(null);
   const startQuiz = () => {
     setQuizStarted(true);
   };
@@ -63,11 +62,9 @@ const First = () => {
   const { questions } = Questions;
   const { question, choices, correctAnswer, type } = questions[activeQuestion];
 
-  const onClickNext = async() => {
+  const onClickNext = () => {
     if (type === 'Written') {
       setSelectedAnswer(writtenAnswer);
-      await getSelectedTrackFeatures();
-      console.log("selected song Features", selectedSongFeature);
     }
     setSelectedAnswerIndex(null);
     setWrittenAnswer('');
@@ -111,20 +108,6 @@ const First = () => {
       }
       const data = await response.json();
       setSearchResults(data);
-      
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-   const getSelectedTrackFeatures = async () => {
-    try {
-      if (!selectedTrack) return; // No selected track to fetch features
-      const response = await fetch(`/api/audio-features?query=${selectedTrack.id}`, {
-        credentials: 'include',
-      });
-      if (!response.ok) throw new Error('Failed to fetch track features');
-      setSelectedSongFeature(await response.json());
     } catch (error) {
       setError(error.message);
     }
@@ -136,7 +119,6 @@ const First = () => {
     setWrittenAnswer(track.name + ' by ' + track.artists.map((artist) => artist.name).join(', '));
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
- 
   const adjustAverages = () => {
     const userResponses = {
       premium: false,
@@ -145,25 +127,10 @@ const First = () => {
       song: selectedTrack ? selectedTrack.id : writtenAnswer,
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
-      // Ensure averages and selectedSongFeature exist for calculation
-      if (!averages || !selectedSongFeature) return;
-  
-      let newAverages = {
-        danceability: averages.danceability * 0.6 + selectedSongFeature.danceability * 0.4,
-        energy: averages.energy * 0.6 + selectedSongFeature.energy * 0.4,
-        key: averages.key * 0.6 + selectedSongFeature.key * 0.4,
-        loudness: averages.loudness * 0.6 + selectedSongFeature.loudness * 0.4,
-        mode: averages.mode * 0.6 + selectedSongFeature.mode * 0.4,
-        speechiness: averages.speechiness * 0.6 + selectedSongFeature.speechiness * 0.4,
-        acousticness: averages.acousticness * 0.6 + selectedSongFeature.acousticness * 0.4,
-        instrumentalness: averages.instrumentalness * 0.6 + selectedSongFeature.instrumentalness * 0.4,
-        liveness: averages.liveness * 0.6 + selectedSongFeature.liveness * 0.4,
-        valence: averages.valence * 0.6 + selectedSongFeature.valence * 0.4,
-        tempo: averages.tempo * 0.6 + selectedSongFeature.tempo * 0.4,
-      };
-  
+    console.log(userResponses);
 
-  
+
+    let newAverages = { ...averages };
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
@@ -179,12 +146,10 @@ const First = () => {
       user_mood.mood = 'Happy';
     } else if (userResponses.mood === 'Sad') {
       newAverages.valence -= 0.2;
-      newAverages.energy -= 0.1;
       user_mood.mood = 'Sad';
     } else if (userResponses.mood=== 'Stressed') {
       newAverages.energy -= 0.3;
-      newAverages.valence += 0.2;
-      newAverages.
+      newAverages.valence += 0.1;
       newAverages.tempo -= 10;
       user_mood.mood = 'Stressed';
     }
@@ -218,18 +183,9 @@ const First = () => {
       newAverages.liveness += 0.2;
       user_mood.environment = 'Noisy';
     }
-    newAverages.tempo = Math.max(0, Math.round(newAverages.tempo));
-    newAverages.key = Math.max(0, Math.round(newAverages.key));
-    newAverages.mode = Math.max(0, Math.round(newAverages.mode));
-    newAverages.loudness = Math.max(0, Math.round(newAverages.loudness));
-    newAverages.instrumentalness = Math.max(0, Math.round(newAverages.instrumentalness));
-    newAverages.speechiness = Math.max(0, Math.round(newAverages.speechiness));
-    newAverages.acousticness = Math.max(0, Math.round(newAverages.acousticness));
-    newAverages.liveness = Math.max(0, Math.round(newAverages.liveness));
-    newAverages.valence = Math.max(0, Math.round(newAverages.valence));
-    newAverages.energy = Math.max(0, Math.round(newAverages.energy));
-    newAverages.danceability = Math.max(0, Math.round(newAverages.danceability));
-
+    newAverages.tempo = Math.round(newAverages.tempo);
+    newAverages.key = Math.round(newAverages.key);
+    newAverages.mode = Math.round(newAverages.mode);
     setAverages(newAverages);
     if (userResponses.premium === 'Yes') {
       getRecommendationsPrem(newAverages);
@@ -238,14 +194,14 @@ const First = () => {
     }
   };
 
-  const getRecommendations = async (newAverages) => {
+  const getRecommendations = async (adjustedAverages) => {
     try {
       const response = await fetch(`/api/recommendations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ newAverages, seedTrack: selectedTrack.id, user_mood: user_mood}),
+        body: JSON.stringify({ adjustedAverages, seedTrack: selectedTrack ? selectedTrack.id : null , user_mood: user_mood}),
         credentials: 'include'
       });
       if (!response.ok) {
@@ -372,7 +328,7 @@ const First = () => {
             </div>
           )}
           <div className='flex-right ml-5'>
-          {questions[activeQuestion].type === "MCQs" && (
+          {questions[activeQuestion].type == "MCQs" && (
             <button onClick={onClickSkip}>
               Skip
             </button>
