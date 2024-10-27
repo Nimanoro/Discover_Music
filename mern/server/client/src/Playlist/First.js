@@ -244,17 +244,17 @@ const First = () => {
       newAverages.liveness += 0.2;
       user_mood.environment = 'Noisy';
     }
-    newAverages.tempo = max(0, Math.round(newAverages.tempo));
-    newAverages.key = max(0, Math.round(newAverages.key));
-    newAverages.mode = max(0, Math.round(newAverages.mode));
-    newAverages.loudness = max(0, Math.round(newAverages.loudness));
-    newAverages.instrumentalness = max(0, Math.round(newAverages.instrumentalness));
-    newAverages.speechiness = max(0, Math.round(newAverages.speechiness));
-    newAverages.acousticness = max(0, Math.round(newAverages.acousticness));
-    newAverages.liveness = max(0, Math.round(newAverages.liveness));
-    newAverages.valence = max(0, Math.round(newAverages.valence));
-    newAverages.energy = max(0, Math.round(newAverages.energy));
-    newAverages.danceability = max(0, Math.round(newAverages.danceability));
+    newAverages.tempo = Math.max(0, Math.round(newAverages.tempo));
+    newAverages.key = Math.max(0, Math.round(newAverages.key));
+    newAverages.mode = Math.max(0, Math.round(newAverages.mode));
+    newAverages.loudness = Math.max(0, Math.round(newAverages.loudness));
+    newAverages.instrumentalness = Math.max(0, Math.round(newAverages.instrumentalness));
+    newAverages.speechiness = Math.max(0, Math.round(newAverages.speechiness));
+    newAverages.acousticness = Math.max(0, Math.round(newAverages.acousticness));
+    newAverages.liveness = Math.max(0, Math.round(newAverages.liveness));
+    newAverages.valence = Math.max(0, Math.round(newAverages.valence));
+    newAverages.energy = Math.max(0, Math.round(newAverages.energy));
+    newAverages.danceability = Math.max(0, Math.round(newAverages.danceability));
 
     setAverages(newAverages);
     if (userResponses.premium === 'Yes') {
