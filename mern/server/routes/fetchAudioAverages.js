@@ -4,7 +4,8 @@ const router = express.Router();
 const dbo = require('../db/conn');
 
 router.get(`/api/audio-features`, async (req, res) => {
-  const { trackId } = req.query;
+  const { trackID } = req.query;
+  console.log("trackID: ", trackID);
   const userId = req.cookies.userID;
   const db_connect = dbo.getDb();
   let accessToken;
@@ -30,8 +31,8 @@ router.get(`/api/audio-features`, async (req, res) => {
 
   let response;
   try {
-    console.log("trackId: ", trackId);
-    response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId}`, {
+    console.log("trackId: ", trackID);
+    response = await fetch(`https://api.spotify.com/v1/audio-features/${trackID}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
