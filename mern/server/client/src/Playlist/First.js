@@ -117,7 +117,7 @@ const First = () => {
 
   const getSelectedFeatures = async () => {
     try {
-      const response = await fetch(`/api/audio-features?query=${selectedTrack.id}`, {
+      const response = await fetch(`/api/audio-features?trackID=${selectedTrack.id}`, {
         credentials: 'include'
       });
       if (!response.ok) {
