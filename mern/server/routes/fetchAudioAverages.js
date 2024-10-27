@@ -65,18 +65,20 @@ router.get(`/api/audio-features`, async (req, res) => {
   };
 
   audioFeatures.forEach(feature => {
-    console.log("feature: ", feature);
-    totals.danceability += feature.danceability;
-    totals.energy += feature.energy;
-    totals.key += feature.key;
-    totals.loudness += feature.loudness;
-    totals.mode += feature.mode;
-    totals.speechiness += feature.speechiness;
-    totals.acousticness += feature.acousticness;
-    totals.instrumentalness += feature.instrumentalness;
-    totals.liveness += feature.liveness;
-    totals.valence += feature.valence;
-    totals.tempo += feature.tempo;
+    if (feature) { // Check if feature is not null
+      console.log("feature: ", feature);
+      totals.danceability += feature.danceability;
+      totals.energy += feature.energy;
+      totals.key += feature.key;
+      totals.loudness += feature.loudness;
+      totals.mode += feature.mode;
+      totals.speechiness += feature.speechiness;
+      totals.acousticness += feature.acousticness;
+      totals.instrumentalness += feature.instrumentalness;
+      totals.liveness += feature.liveness;
+      totals.valence += feature.valence;
+      totals.tempo += feature.tempo;
+    }
   });
 
   const averages = {};
