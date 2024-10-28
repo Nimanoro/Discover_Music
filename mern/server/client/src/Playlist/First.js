@@ -147,9 +147,26 @@ const First = () => {
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
     console.log(userResponses);
+    let newAverages;
+    if (songFeatures === null) {
+      newAverages = {...averages};
+    }
+    else {
+      newAverages = { 
+        danceability: averages.danceability * 0.6 + songFeatures.danceability * 0.4,
+        energy: averages.energy * 0.6 + songFeatures.energy * 0.4,
+        key: averages.key * 0.6 + songFeatures.key * 0.4,
+        loudness: averages.loudness * 0.6 + songFeatures.loudness * 0.4,
+        mode: averages.mode * 0.6 + songFeatures.mode * 0.4,
+        speechiness: averages.speechiness * 0.6 + songFeatures.speechiness * 0.4,
+        acousticness: averages.acousticness * 0.6 + songFeatures.acousticness * 0.4,
+        instrumentalness: averages.instrumentalness * 0.6 + songFeatures.instrumentalness * 0.4,
+        liveness: averages.liveness * 0.6 + songFeatures.liveness * 0.4,
+        valence: averages.valence * 0.6 + songFeatures.valence * 0.4,
+        tempo: averages.tempo * 0.6 + songFeatures.tempo * 0.4
+      };
+    }
 
-
-    let newAverages = { ...averages };
 
     if (userResponses.mood === 'Energetic') {
       user_mood.mood = 'Energetic';
