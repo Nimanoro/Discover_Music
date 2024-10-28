@@ -218,9 +218,17 @@ const First = () => {
       newAverages.liveness += 0.2;
       user_mood.environment = 'Noisy';
     }
-    newAverages.tempo = Math.round(newAverages.tempo);
-    newAverages.key = Math.round(newAverages.key);
-    newAverages.mode = Math.round(newAverages.mode);
+    newAverages.tempo = Math.max(0, Math.round(newAverages.tempo));
+    newAverages.key = Math.max(Math.round(newAverages.key), 0);
+    newAverages.mode = Math.max(0, Math.round(newAverages.mode));
+    newAverages.loudness = Math.max(0, newAverages.loudness);
+    newAverages.speechiness = Math.max(0, newAverages.speechiness);
+    newAverages.acousticness = Math.max(0, newAverages.acousticness);
+    newAverages.instrumentalness = Math.max(0, newAverages.instrumentalness);
+    newAverages.liveness = Math.max(0, newAverages.liveness);
+    newAverages.valence = Math.max(0, newAverages.valence);
+    newAverages.energy = Math.max(0, newAverages.energy);
+    newAverages.danceability = Math.max(0, newAverages.danceability);
     setAverages(newAverages);
     if (userResponses.premium === 'Yes') {
       getRecommendationsPrem(newAverages);
