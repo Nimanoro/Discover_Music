@@ -242,7 +242,7 @@ const First = () => {
       user_mood.environment = 'Noisy';
     }
     newAverages.tempo = Math.max(0, Math.round(newAverages.tempo));
-    newAverages.key = Math.max(Math.round(newAverages.key), 0);
+    newAverages.key = Math.min(11, Math.max(Math.round(newAverages.key), 0));
     newAverages.mode = Math.min(1, Math.max(0, Math.round(newAverages.mode)));
     newAverages.loudness = Math.min(1, Math.max(0, newAverages.loudness));
     newAverages.speechiness = Math.min(1, Math.max(0, newAverages.speechiness));
