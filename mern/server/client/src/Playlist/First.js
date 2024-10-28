@@ -24,12 +24,11 @@ const First = () => {
   const [playlistDetails, setPlaylistDetails] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [songFeatures, setSongFeatures] = useState(null);
   const startQuiz = () => {
     setQuizStarted(true);
   };
   
-
-  let songFeatures = null;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -123,7 +122,7 @@ const First = () => {
         throw new Error('Failed to search tracks');
       }
       const data = await response.json();
-      songFeatures = data;
+      setSongFeatures(data);
       console.log("selected track features", songFeatures);
     } catch (error) {
       setError(error.message);
@@ -137,7 +136,7 @@ const First = () => {
     
   };
   const user_mood = { mood: '', activity: '', song: '', environment: ''};
-  const adjustAverages = () => {
+  const adjustAverages = async () => {
     const userResponses = {
       premium: false,
       mood: questions[1].choices[selectedAnswerIndexes[0]],
@@ -146,6 +145,9 @@ const First = () => {
       environment: questions[3].choices[selectedAnswerIndexes[2]]
     };
     console.log(userResponses);
+    if (!songFeatures) {
+      await getSelectedFeatures();
+    }
     let newAverages;
     let mx = 0;
     for (let key in averages) {
