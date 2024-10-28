@@ -66,7 +66,7 @@ const First = () => {
   const onClickNext = async () => {
     if (type === 'Written') {
       await setSelectedAnswer(writtenAnswer);
-      getSelectedFeatures();
+      await getSelectedFeatures();
     }
     setSelectedAnswerIndex(null);
     setWrittenAnswer('');
