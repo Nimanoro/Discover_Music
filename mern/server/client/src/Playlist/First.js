@@ -122,7 +122,7 @@ const First = () => {
         throw new Error('Failed to search tracks');
       }
       const data = await response.json();
-      setSongFeatures(data);
+      await setSongFeatures(data);
       console.log("selected track features", songFeatures);
     } catch (error) {
       setError(error.message);
@@ -155,6 +155,10 @@ const First = () => {
         mx = averages[key];
       }
     };
+    console.log("mx: ", mx);
+    console.log("averages: ", averages);
+    console.log("songFeatures: ", songFeatures);
+    
     if (mx === 0) {
       newAverages = { 
         danceability: songFeatures.danceability,
@@ -239,15 +243,15 @@ const First = () => {
     }
     newAverages.tempo = Math.max(0, Math.round(newAverages.tempo));
     newAverages.key = Math.max(Math.round(newAverages.key), 0);
-    newAverages.mode = Math.max(0, Math.round(newAverages.mode));
-    newAverages.loudness = Math.max(0, newAverages.loudness);
-    newAverages.speechiness = Math.max(0, newAverages.speechiness);
-    newAverages.acousticness = Math.max(0, newAverages.acousticness);
-    newAverages.instrumentalness = Math.max(0, newAverages.instrumentalness);
-    newAverages.liveness = Math.max(0, newAverages.liveness);
-    newAverages.valence = Math.max(0, newAverages.valence);
-    newAverages.energy = Math.max(0, newAverages.energy);
-    newAverages.danceability = Math.max(0, newAverages.danceability);
+    newAverages.mode = Math.min(1, Math.max(0, Math.round(newAverages.mode)));
+    newAverages.loudness = Math.min(1, Math.max(0, newAverages.loudness));
+    newAverages.speechiness = Math.min(1, Math.max(0, newAverages.speechiness));
+    newAverages.acousticness = Math.min(Math.max(0, newAverages.acousticness), 1);
+    newAverages.instrumentalness = Math.min(Math.max(0, newAverages.instrumentalness), 1);
+    newAverages.liveness = Math.min(1, Math.max(0, newAverages.liveness));
+    newAverages.valence = Math.min(1, Math.max(0, newAverages.valence));
+    newAverages.energy = Math.min(Math.max(0, newAverages.energy), 1);
+    newAverages.danceability = Math.min(Math.max(0, newAverages.danceability), 1);
     setAverages(newAverages);
     if (userResponses.premium === 'Yes') {
       getRecommendationsPrem(newAverages);
@@ -390,7 +394,7 @@ const First = () => {
             </div>
           )}
           <div className='flex-right ml-5'>
-          {questions[activeQuestion].type == "MCQs" && (
+          {questions[activeQuestion].type === "MCQs" && (
             <button onClick={onClickSkip}>
               Skip
             </button>
