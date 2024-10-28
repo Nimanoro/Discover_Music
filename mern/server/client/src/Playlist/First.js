@@ -153,25 +153,7 @@ const First = () => {
         mx = averages[key];
       }
     };
-    if (songFeatures === null && mx === 0) {
-      throw new Error('No song selected');
-    }
-    else if (songFeatures === null) {
-      newAverages = {
-        danceability: averages.danceability,
-        energy: averages.energy,
-        key: averages.key,
-        loudness: averages.loudness,
-        mode: averages.mode,
-        speechiness: averages.speechiness,
-
-        acousticness: averages.acousticness,
-        instrumentalness: averages.instrumentalness,
-        liveness: averages.liveness,
-        valence: averages.valence,
-        tempo: averages.tempo
-      };
-    } else if (mx === 0) {
+    if (mx === 0) {
       newAverages = { 
         danceability: songFeatures.danceability,
         energy: songFeatures.energy,
