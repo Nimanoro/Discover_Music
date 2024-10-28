@@ -147,10 +147,45 @@ const First = () => {
     };
     console.log(userResponses);
     let newAverages;
-    if (songFeatures === null) {
-      newAverages = {...averages};
+    let mx = 0;
+    for (let key in averages) {
+      if (averages[key] > mx) {
+        mx = averages[key];
+      }
+    };
+    if (songFeatures === null && mx === 0) {
+      throw new Error('No song selected');
     }
-    else {
+    else if (songFeatures === null) {
+      newAverages = {
+        danceability: averages.danceability,
+        energy: averages.energy,
+        key: averages.key,
+        loudness: averages.loudness,
+        mode: averages.mode,
+        speechiness: averages.speechiness,
+
+        acousticness: averages.acousticness,
+        instrumentalness: averages.instrumentalness,
+        liveness: averages.liveness,
+        valence: averages.valence,
+        tempo: averages.tempo
+      };
+    } else if (mx === 0) {
+      newAverages = { 
+        danceability: songFeatures.danceability,
+        energy: songFeatures.energy,
+        key: songFeatures.key,
+        loudness: songFeatures.loudness,
+        mode: songFeatures.mode,
+        speechiness: songFeatures.speechiness,
+        acousticness: songFeatures.acousticness,
+        instrumentalness: songFeatures.instrumentalness,
+        liveness: songFeatures.liveness,
+        valence: songFeatures.valence,
+        tempo: songFeatures.tempo
+      };
+    } else {
       newAverages = { 
         danceability: averages.danceability * 0.6 + songFeatures.danceability * 0.4,
         energy: averages.energy * 0.6 + songFeatures.energy * 0.4,
