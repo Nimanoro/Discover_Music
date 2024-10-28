@@ -252,6 +252,8 @@ const First = () => {
     newAverages.valence = Math.min(1, Math.max(0, newAverages.valence));
     newAverages.energy = Math.min(Math.max(0, newAverages.energy), 1);
     newAverages.danceability = Math.min(Math.max(0, newAverages.danceability), 1);
+    newAverages.loudness = Math.min(Math.max(0, newAverages.loudness), 1);
+    
     setAverages(newAverages);
     if (userResponses.premium === 'Yes') {
       getRecommendationsPrem(newAverages);

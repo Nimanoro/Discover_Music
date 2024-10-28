@@ -58,6 +58,7 @@ router.get(`/api/audio-features`, async (req, res) => {
     tempo: audioFeatures.tempo,
     key: audioFeatures.key,
     mode: audioFeatures.mode,
+    loudness: audioFeatures.loudness,
   };
   
   res.status(200).send(totals);
