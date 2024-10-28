@@ -24,13 +24,12 @@ const First = () => {
   const [playlistDetails, setPlaylistDetails] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const [songFeatures, setSongFeatures] = useState(null);
   const startQuiz = () => {
     setQuizStarted(true);
   };
   
 
-  
+  let songFeatures = null;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -124,7 +123,7 @@ const First = () => {
         throw new Error('Failed to search tracks');
       }
       const data = await response.json();
-      setSongFeatures(data);
+      songFeatures = data;
       console.log("selected track features", songFeatures);
     } catch (error) {
       setError(error.message);
