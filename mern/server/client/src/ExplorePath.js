@@ -4,7 +4,8 @@ const ExplorePath = () => {
   const [searchQuery, setSearchQuery] = useState('');          // For user to search starting song
   const [searchResults, setSearchResults] = useState([]);      // Results from song search
   const [currentNode, setCurrentNode] = useState(null);        // Current node in the path
-  const [userPath, setUserPath] = useState([]);               // Audio features for a given track
+  const [userPath, setUserPath] = useState([]);     // Audio features for a given track
+  const [selectedTrack, setSelectedTrack]          
 
   // Function to handle search for the starting song
   const searchTracks = async () => {
@@ -17,6 +18,11 @@ const ExplorePath = () => {
     } catch (error) {
       console.error('Error searching tracks:', error);
     }
+  };
+
+  const selectTrack = (track) => {
+    setSelectedTrack(track);
+    setSearchResults([]);    
   };
 
   // Function to get audio features for a given track
@@ -101,7 +107,7 @@ const ExplorePath = () => {
           <button className="" onClick={searchTracks}>Search</button>
           <ul>
             {searchResults.map((track) => (
-              <li key={track.id} onClick={() => initializeStartingNode(track)}>
+              <li key={track.id} onClick={() => selectTrack(track)}>
                 {track.album && track.album.images && track.album.images.length > 0 ? (
                   <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
                   ) : (
@@ -124,6 +130,7 @@ const ExplorePath = () => {
               </li>
             ))}
           </ul>
+        
         </div>
       )}
     </div>
