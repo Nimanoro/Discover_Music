@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Playlist/quiz.css';
 
 const ExplorePath = () => {
-  const [searchQuery, setSearchQuery] = useState('');          // For user to search starting song
-  const [searchResults, setSearchResults] = useState([]);      // Results from song search
-  const [currentNode, setCurrentNode] = useState(null);        // Current node in the path
-  const [userPath, setUserPath] = useState([]);                // Audio features for a given track
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [currentNode, setCurrentNode] = useState(null);
+  const [userPath, setUserPath] = useState([]);
 
   // Function to handle search for the starting song
   const searchTracks = async () => {
@@ -14,16 +14,17 @@ const ExplorePath = () => {
         credentials: 'include',
       });
       const data = await response.json();
-      setSearchResults(data.tracks); // Display search results for the user to choose from
+      console.log("API Response:", data); // Debugging: Check API response
+      setSearchResults(data.tracks || []); // Ensure we set an array even if `data.tracks` is undefined
     } catch (error) {
       console.error('Error searching tracks:', error);
     }
   };
 
   // Function to handle selecting a track from search results
-  const selectTrack = (track) => {
-    setSearchResults([]); // Clear search results after selection
-    initializeStartingNode(track); // Initialize the starting node with the selected track
+  const selectTrack = async (track) => {
+    setSearchResults([]); // Clear search results
+    await initializeStartingNode(track); // Await to ensure it completes before proceeding
   };
 
   // Function to get audio features for a given track
@@ -42,7 +43,7 @@ const ExplorePath = () => {
 
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
-    const trackFeatures = await getFeatures(track.id);  // Fetch and directly use features
+    const trackFeatures = await getFeatures(track.id); // Await getFeatures to ensure data is ready
     const startingNode = {
       id: track.id,
       type: "song",
@@ -52,9 +53,9 @@ const ExplorePath = () => {
       features: trackFeatures,
     };
 
-    setCurrentNode(startingNode);    // Set the current node to this starting node
-    setUserPath([startingNode]);     // Add starting node to user path history
-    fetchNextOptions(startingNode);  // Fetch initial recommendations for the first set of options
+    setCurrentNode(startingNode); // Set the current node to this starting node
+    setUserPath([startingNode]); // Add starting node to user path history
+    await fetchNextOptions(startingNode); // Await to ensure next options are ready before rendering
   };
 
   // Fetch recommendations for the given node to populate next options
@@ -87,10 +88,10 @@ const ExplorePath = () => {
   };
 
   // Select a node as the next step in the journey
-  const selectNode = (node) => {
+  const selectNode = async (node) => {
     setUserPath([...userPath, node]); // Add selected node to path
-    setCurrentNode(node);             // Set it as current node
-    fetchNextOptions(node);           // Fetch recommendations for the new current node
+    setCurrentNode(node); // Set it as current node
+    await fetchNextOptions(node); // Await to ensure recommendations are ready before rendering
   };
 
   return (
@@ -105,7 +106,7 @@ const ExplorePath = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder=" e.g. 'Shape of You' or ed sheeran"
           />
-          <button className="" onClick={searchTracks}>Search</button>
+          <button onClick={searchTracks}>Search</button>
           <ul>
             {searchResults && searchResults.length > 0 ? (
               searchResults.map((track) => (
@@ -119,7 +120,7 @@ const ExplorePath = () => {
                 </li>
               ))
             ) : (
-              <li>No results found.</li> // Display this if `searchResults` is empty
+              <li>No results found.</li>
             )}
           </ul>
         </div>
@@ -129,11 +130,15 @@ const ExplorePath = () => {
           <img src={currentNode.image} alt={currentNode.name} width="100" />
           <h4>Choose Your Next Stop:</h4>
           <ul>
-            {currentNode.nextOptions.map((option) => (
-              <li key={option.id} onClick={() => selectNode(option)}>
-                {option.name} by {option.artists.join(', ')}
-              </li>
-            ))}
+            {currentNode.nextOptions && currentNode.nextOptions.length > 0 ? (
+              currentNode.nextOptions.map((option) => (
+                <li key={option.id} onClick={() => selectNode(option)}>
+                  {option.name} by {option.artists.join(', ')}
+                </li>
+              ))
+            ) : (
+              <li>No next options available.</li>
+            )}
           </ul>
         </div>
       )}
