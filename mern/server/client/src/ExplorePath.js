@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import './Playlist/quiz.css';
 const ExplorePath = () => {
   const [searchQuery, setSearchQuery] = useState('');          // For user to search starting song
   const [searchResults, setSearchResults] = useState([]);      // Results from song search
