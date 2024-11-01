@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './Playlist/quiz.css';
+
 const ExplorePath = () => {
   const [searchQuery, setSearchQuery] = useState('');          // For user to search starting song
   const [searchResults, setSearchResults] = useState([]);      // Results from song search
   const [currentNode, setCurrentNode] = useState(null);        // Current node in the path
-  const [userPath, setUserPath] = useState([]);     // Audio features for a given track
-  const [selectedTrack, setSelectedTrack]  = useState(null);  // Track selected by the user        
+  const [userPath, setUserPath] = useState([]);                // Audio features for a given track
 
   // Function to handle search for the starting song
   const searchTracks = async () => {
@@ -20,11 +20,10 @@ const ExplorePath = () => {
     }
   };
 
+  // Function to handle selecting a track from search results
   const selectTrack = (track) => {
-    setSelectedTrack(track);
-    setSearchResults([]);    
-    initializeStartingNode(selectedTrack); // Initialize the starting node with the selected
-    getFeatures(selectedTrack.id); // Fetch audio features for the selected track
+    setSearchResults([]); // Clear search results after selection
+    initializeStartingNode(track); // Initialize the starting node with the selected track
   };
 
   // Function to get audio features for a given track
@@ -55,7 +54,7 @@ const ExplorePath = () => {
 
     setCurrentNode(startingNode);    // Set the current node to this starting node
     setUserPath([startingNode]);     // Add starting node to user path history
-    fetchNextOptions(startingNode);        // Clear search results after selection
+    fetchNextOptions(startingNode);  // Fetch initial recommendations for the first set of options
   };
 
   // Fetch recommendations for the given node to populate next options
@@ -102,7 +101,7 @@ const ExplorePath = () => {
           <input
             className='h-11 rounded text-black border border-gray-400 focus:outline-none focus:border-blue-500 px-3 py-1 mb-3'
             type="text"
-            value={searchQuery} // Use searchQuery for clarity
+            value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder=" e.g. 'Shape of You' or ed sheeran"
           />
@@ -112,10 +111,10 @@ const ExplorePath = () => {
               <li key={track.id} onClick={() => selectTrack(track)}>
                 {track.album && track.album.images && track.album.images.length > 0 ? (
                   <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                  ) : (
+                ) : (
                   <img src="default_image_url" alt="Default" width="50" height="50" />
-                  )}
-                  {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+                )}
+                {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
               </li>
             ))}
           </ul>
@@ -132,7 +131,6 @@ const ExplorePath = () => {
               </li>
             ))}
           </ul>
-        
         </div>
       )}
     </div>
