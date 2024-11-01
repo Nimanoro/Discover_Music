@@ -4,7 +4,7 @@ import User from "./Login/user";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./Homepage_components/Home.js";
 import First from "./Playlist/First.js";
-import ExplorePath from "./path.js";
+import ExplorePath from "./ExplorePath.js";
 import { Helmet } from 'react-helmet';
 
 export default function App() {
