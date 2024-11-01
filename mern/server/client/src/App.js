@@ -4,6 +4,7 @@ import User from "./Login/user";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./Homepage_components/Home.js";
 import First from "./Playlist/First.js";
+import Path from "./path.js";
 import { Helmet } from 'react-helmet';
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
         <Route exact path='/user' element={<User/>} />
         <Route exact path = '/make_playlist' element={<First/>} />
         <Route exact path = '/by-song' element={<First/>} />
-
+        <Route exact path = '/path' element={<Path/>} />
 
       </Routes>
     </div>
