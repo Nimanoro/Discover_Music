@@ -5,9 +5,11 @@ const ExplorePath = () => {
   const [searchResults, setSearchResults] = useState([]);      // Results from song search
   const [currentNode, setCurrentNode] = useState(null);        // Current node in the path
   const [userPath, setUserPath] = useState([]);                // User’s journey through nodes
+  const [writtenAnswer, setWrittenAnswer] = useState('');     // User’s written answer
+ 
 
   // Function to handle search for the starting song
-  const handleSearch = async () => {
+  const  searchTracks  = async () => {
     try {
       const response = await fetch(`/api/search-tracks?query=${encodeURIComponent(searchQuery)}`, {
         credentials: 'include',
@@ -81,21 +83,27 @@ const ExplorePath = () => {
       <h2>Start Your Music Journey</h2>
       {!currentNode ? (
         <div>
-          <input
-            type="text"
-            placeholder="Search for a song or artist..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button onClick={handleSearch}>Search</button>
-          <ul>
-            {searchResults.map((track) => (
-              <li key={track.id} onClick={() => initializeStartingNode(track)}>
-                {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <input
+          className='h-11 rounded text-black border border-gray-400 focus:outline-none focus:border-blue-500 px-3 py-1 mb-3'
+          type="text"
+          value={writtenAnswer}
+          onChange={(e) => setWrittenAnswer(e.target.value)}
+          placeholder=" e.g. 'Shape of You' or ed sheeran"
+        />
+        <button className="" onClick={searchTracks}>Search</button>
+        <ul>
+          {searchResults.map((track) => (
+            <li key={track.id} onClick={() => initializeStartingNode(track)}>
+              {track.album && track.album.images && track.album.images.length > 0 ? (
+                <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+              ) : (
+                <img src="default_image_url" alt="Default" width="50" height="50" />
+              )}
+              {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+            </li>
+          ))}
+        </ul>
+      </div>
       ) : (
         <div>
           <h3>{currentNode.name} by {currentNode.artists.join(', ')}</h3>
