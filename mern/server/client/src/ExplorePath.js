@@ -15,7 +15,7 @@ const ExplorePath = () => {
       });
       const data = await response.json();
       console.log("API Response:", data); // Debugging: Check API response
-      await setSearchResults(data.tracks || []); // Ensure we set an array even if `data.tracks` is undefined
+      await setSearchResults(data); // Ensure we set an array even if `data.tracks` is undefined
       console.log("Search Results:", searchResults); // Debugging: Check searchResults state
     } catch (error) {
       console.error('Error searching tracks:', error);
