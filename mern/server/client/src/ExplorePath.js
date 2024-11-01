@@ -47,8 +47,7 @@ const ExplorePath = () => {
 
     setCurrentNode(startingNode);    // Set the current node to this starting node
     setUserPath([startingNode]);     // Add starting node to user path history
-    fetchNextOptions(startingNode);  // Fetch initial recommendations for the first set of options
-    setSearchResults([]);            // Clear search results after selection
+    fetchNextOptions(startingNode);        // Clear search results after selection
   };
 
   // Fetch recommendations for the given node to populate next options
@@ -105,10 +104,10 @@ const ExplorePath = () => {
               <li key={track.id} onClick={() => initializeStartingNode(track)}>
                 {track.album && track.album.images && track.album.images.length > 0 ? (
                   <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                ) : (
+                  ) : (
                   <img src="default_image_url" alt="Default" width="50" height="50" />
-                )}
-                {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+                  )}
+                  {track.name} by {track.artists.map(artist => artist.name).join(', ')}
               </li>
             ))}
           </ul>
