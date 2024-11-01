@@ -6,25 +6,28 @@ const ExplorePath = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
   const [userPath, setUserPath] = useState([]);
+  const [loading, setLoading] = useState(false); // New loading state
 
   // Function to handle search for the starting song
   const searchTracks = async () => {
     try {
+      setLoading(true); // Set loading to true before starting the fetch
       const response = await fetch(`/api/search-tracks?query=${encodeURIComponent(searchQuery)}`, {
         credentials: 'include',
       });
       const data = await response.json();
       console.log("API Response:", data); // Debugging: Check API response
-      await setSearchResults(data); // Ensure we set an array even if `data.tracks` is undefined
-      console.log("Search Results:", searchResults); // Debugging: Check searchResults state
+      setSearchResults(data.tracks || []); // Update state with search results
     } catch (error) {
       console.error('Error searching tracks:', error);
+    } finally {
+      setLoading(false); // Set loading to false after fetch completes
     }
   };
 
   // Function to handle selecting a track from search results
-  const selectTrack = async (track) => {
-    await initializeStartingNode(track); // Await to ensure it completes before proceeding
+  const selectTrack = (track) => {
+    initializeStartingNode(track);
   };
 
   // Function to get audio features for a given track
@@ -43,7 +46,7 @@ const ExplorePath = () => {
 
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
-    const trackFeatures = await getFeatures(track.id); // Await getFeatures to ensure data is ready
+    const trackFeatures = await getFeatures(track.id); // Fetch features
     const startingNode = {
       id: track.id,
       type: "song",
@@ -53,9 +56,9 @@ const ExplorePath = () => {
       features: trackFeatures,
     };
 
-    setCurrentNode(startingNode); // Set the current node to this starting node
+    setCurrentNode(startingNode); // Set current node
     setUserPath([startingNode]); // Add starting node to user path history
-    await fetchNextOptions(startingNode); // Await to ensure next options are ready before rendering
+    await fetchNextOptions(startingNode); // Fetch next options
   };
 
   // Fetch recommendations for the given node to populate next options
@@ -88,10 +91,10 @@ const ExplorePath = () => {
   };
 
   // Select a node as the next step in the journey
-  const selectNode = async (node) => {
+  const selectNode = (node) => {
     setUserPath([...userPath, node]); // Add selected node to path
     setCurrentNode(node); // Set it as current node
-    await fetchNextOptions(node); // Await to ensure recommendations are ready before rendering
+    fetchNextOptions(node); // Fetch recommendations for the new current node
   };
 
   return (
@@ -107,25 +110,26 @@ const ExplorePath = () => {
             placeholder=" e.g. 'Shape of You' or ed sheeran"
           />
           <button onClick={searchTracks}>Search</button>
-          
-          {console.log("Rendering searchResults:", searchResults)} {/* Add this log */}
-          
-          <ul>
-            {searchResults && searchResults.length > 0 ? (
-              searchResults.map((track) => (
-                <li key={track.id} onClick={() => selectTrack(track)}>
-                  {track.album && track.album.images && track.album.images.length > 0 ? (
-                    <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                  ) : (
-                    <img src="default_image_url" alt="Default" width="50" height="50" />
-                  )}
-                  {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
-                </li>
-              ))
-            ) : (
-              <li>No results found.</li> // Ensure this displays if `searchResults` is empty
-            )}
-          </ul>
+          {loading ? (
+            <p>Loading...</p> // Display loading message while fetching data
+          ) : (
+            <ul>
+              {searchResults && searchResults.length > 0 ? (
+                searchResults.map((track) => (
+                  <li key={track.id} onClick={() => selectTrack(track)}>
+                    {track.album && track.album.images && track.album.images.length > 0 ? (
+                      <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                    ) : (
+                      <img src="default_image_url" alt="Default" width="50" height="50" />
+                    )}
+                    {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
+                  </li>
+                ))
+              ) : (
+                <li>No results found.</li>
+              )}
+            </ul>
+          )}
         </div>
       ) : (
         <div>
@@ -147,6 +151,6 @@ const ExplorePath = () => {
       )}
     </div>
   );
-};  
+};
 
 export default ExplorePath;
