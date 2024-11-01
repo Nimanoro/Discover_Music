@@ -15,7 +15,8 @@ const ExplorePath = () => {
       });
       const data = await response.json();
       console.log("API Response:", data); // Debugging: Check API response
-      setSearchResults(data.tracks || []); // Ensure we set an array even if `data.tracks` is undefined
+      await setSearchResults(data.tracks || []); // Ensure we set an array even if `data.tracks` is undefined
+      console.log("Search Results:", searchResults); // Debugging: Check searchResults state
     } catch (error) {
       console.error('Error searching tracks:', error);
     }
@@ -23,7 +24,6 @@ const ExplorePath = () => {
 
   // Function to handle selecting a track from search results
   const selectTrack = async (track) => {
-    setSearchResults([]); // Clear search results
     await initializeStartingNode(track); // Await to ensure it completes before proceeding
   };
 
@@ -107,6 +107,9 @@ const ExplorePath = () => {
             placeholder=" e.g. 'Shape of You' or ed sheeran"
           />
           <button onClick={searchTracks}>Search</button>
+          
+          {console.log("Rendering searchResults:", searchResults)} {/* Add this log */}
+          
           <ul>
             {searchResults && searchResults.length > 0 ? (
               searchResults.map((track) => (
@@ -120,7 +123,7 @@ const ExplorePath = () => {
                 </li>
               ))
             ) : (
-              <li>No results found.</li>
+              <li>No results found.</li> // Ensure this displays if `searchResults` is empty
             )}
           </ul>
         </div>
@@ -144,6 +147,6 @@ const ExplorePath = () => {
       )}
     </div>
   );
-};
+};  
 
 export default ExplorePath;
