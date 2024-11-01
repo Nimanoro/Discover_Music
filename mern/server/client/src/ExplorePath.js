@@ -5,7 +5,7 @@ const ExplorePath = () => {
   const [searchResults, setSearchResults] = useState([]);      // Results from song search
   const [currentNode, setCurrentNode] = useState(null);        // Current node in the path
   const [userPath, setUserPath] = useState([]);     // Audio features for a given track
-  const [selectedTrack, setSelectedTrack]          
+  const [selectedTrack, setSelectedTrack]  = useState(null);  // Track selected by the user        
 
   // Function to handle search for the starting song
   const searchTracks = async () => {
@@ -23,6 +23,8 @@ const ExplorePath = () => {
   const selectTrack = (track) => {
     setSelectedTrack(track);
     setSearchResults([]);    
+    initializeStartingNode(selectedTrack); // Initialize the starting node with the selected
+    getFeatures(selectedTrack.id); // Fetch audio features for the selected track
   };
 
   // Function to get audio features for a given track
