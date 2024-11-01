@@ -114,21 +114,17 @@ const ExplorePath = () => {
             <p>Loading...</p> // Display loading message while fetching data
           ) : (
             <ul>
-              {searchResults && searchResults.length > 0 ? (
-                searchResults.map((track) => (
-                  <li key={track.id} onClick={() => selectTrack(track)}>
-                    {track.album && track.album.images && track.album.images.length > 0 ? (
-                      <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                    ) : (
-                      <img src="default_image_url" alt="Default" width="50" height="50" />
-                    )}
-                    {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
-                  </li>
-                ))
-              ) : (
-                <li>No results found.</li>
-              )}
-            </ul>
+            {searchResults.map((track) => (
+              <li key={track.id} onClick={() => selectTrack(track)}>
+                {track.album && track.album.images && track.album.images.length > 0 ? (
+                  <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                ) : (
+                  <img src="default_image_url" alt="Default" width="50" height="50" />
+                )}
+                {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+              </li>
+            ))}
+          </ul>
           )}
         </div>
       ) : (
