@@ -107,16 +107,20 @@ const ExplorePath = () => {
           />
           <button className="" onClick={searchTracks}>Search</button>
           <ul>
-            {searchResults.map((track) => (
-              <li key={track.id} onClick={() => selectTrack(track)}>
-                {track.album && track.album.images && track.album.images.length > 0 ? (
-                  <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                ) : (
-                  <img src="default_image_url" alt="Default" width="50" height="50" />
-                )}
-                {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
-              </li>
-            ))}
+            {searchResults && searchResults.length > 0 ? (
+              searchResults.map((track) => (
+                <li key={track.id} onClick={() => selectTrack(track)}>
+                  {track.album && track.album.images && track.album.images.length > 0 ? (
+                    <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                  ) : (
+                    <img src="default_image_url" alt="Default" width="50" height="50" />
+                  )}
+                  {track.name} by {track.artists.map((artist) => artist.name).join(', ')}
+                </li>
+              ))
+            ) : (
+              <li>No results found.</li> // Display this if `searchResults` is empty
+            )}
           </ul>
         </div>
       ) : (
