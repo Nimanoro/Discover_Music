@@ -7,9 +7,7 @@ const ExplorePath = () => {
   const [currentNode, setCurrentNode] = useState(null);
   const [userPath, setUserPath] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentNodeFeatures, setCurrentNodeFeatures] = useState(null);
-
-
+  const [songFeatures, setSongFeatures] = useState(null);
 
 
   const searchTracks = async () => {
@@ -43,9 +41,12 @@ const ExplorePath = () => {
       const response = await fetch(`/api/audio-features?trackID=${trackId}`, {
         credentials: 'include',
       });
+      if (!response.ok) {
+        throw new Error('Failed to search tracks');
+      }
       const data = await response.json();
-      await setCurrentNodeFeatures(data);
-      console.log("selected track features", currentNodeFeatures);
+      await setSongFeatures(data);
+      console.log("selected track features", songFeatures);
     } catch (error) {
       console.error('Error fetching audio features:', error);
     }
@@ -59,7 +60,7 @@ const ExplorePath = () => {
       name: track.name,
       artists: track.artists.map((artist) => artist.name),
       image: track.album.images[0]?.url || "default_image_url",
-      features: currentNodeFeatures,
+      features: songFeatures,
     };
 
     await setCurrentNode(startingNode); // Set current node
@@ -69,7 +70,7 @@ const ExplorePath = () => {
 
   // Fetch recommendations for the given node to populate next options
   const fetchNextOptions = async (node) => {
-    if (! currentNodeFeatures) {
+    if (! songFeatures) {
       await getFeatures(node.id);
     }
     try {
@@ -78,7 +79,7 @@ const ExplorePath = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ currentNodeFeatures, seedTrack: node.id }),
+        body: JSON.stringify({ currentNodeFeatures: songFeatures, seedTrack: node.id }),
         credentials: 'include'
       });
       if (!response.ok) {
