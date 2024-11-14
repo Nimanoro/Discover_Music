@@ -142,7 +142,6 @@ const ExplorePath = () => {
       const data = await response.json();
       const nextNodes = data.tracks.filter((track) => track.id !== node.id).map((track) => createNode(track, node));      
       console.log("next nodes:", nextNodes);
-      node.isActive = false;
       node.nextOptions = nextNodes;
       console.log("node after next nodes:", node);
     } catch (error) {
@@ -156,16 +155,14 @@ const ExplorePath = () => {
     }
   
     // Mark the selected node as active
-    node.isActive = true;
+    node.isActive = false;
   
     // Add the selected node to the user path
     setUserPath([...userPath, node]);
   
     // Set the selected node as the current node
     setCurrentNode(node);
-    
     await setUserPath([...userPath, node]);
-    await setCurrentNode(node); 
     await fetchNextOptions(node);
   };
 
