@@ -46,14 +46,19 @@ const ExplorePath = () => {
       }
       const data = await response.json();
       await setSongFeatures(data);
+
       console.log("selected track features", songFeatures);
+      return data;
     } catch (error) {
       console.error('Error fetching audio features:', error);
+      return null;
     }
   };
 
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
+    await getFeatures(track.id);
+    console.log("selected track features", songFeatures);
     const startingNode = {
       id: track.id,
       type: "song",
@@ -70,16 +75,18 @@ const ExplorePath = () => {
 
   // Fetch recommendations for the given node to populate next options
   const fetchNextOptions = async (node) => {
-    if (! songFeatures) {
-      await getFeatures(node.id);
+    if (! node.features) {
+      node.features = getFeatures(node.id);
     }
+    console.log("node:", node);
+    console.pring("pathrecom body", songFeatures, node.id);
     try {
       const response = await fetch(`/api/pathrecommendations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ currentNodeFeatures: songFeatures, seedTrack: node.id }),
+        body: JSON.stringify({ songFeatures, seedTrack: node.id }),
         credentials: 'include'
       });
       if (!response.ok) {
@@ -102,9 +109,9 @@ const ExplorePath = () => {
 
   // Select a node as the next step in the journey
   const selectNode = async (node) => {
-    await setUserPath([...userPath, node]); // Add selected node to path
-    await setCurrentNode(node); // Set it as current node
-    await fetchNextOptions(node); // Fetch recommendations for the new current node
+    await setUserPath([...userPath, node]);
+    await setCurrentNode(node); 
+    await fetchNextOptions(node);
   };
 
   return (
