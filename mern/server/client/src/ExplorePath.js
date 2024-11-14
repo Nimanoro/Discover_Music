@@ -6,9 +6,11 @@ const ExplorePath = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
   const [userPath, setUserPath] = useState([]);
-  const [loading, setLoading] = useState(false); // New loading state
+  const [loading, setLoading] = useState(false);
   const [currentNodeFeatures, setCurrentNodeFeatures] = useState(null);
-  // Function to handle search for the starting song
+
+
+
 
   const searchTracks = async () => {
     try {
@@ -26,12 +28,16 @@ const ExplorePath = () => {
     }
   };
 
-  // Function to handle selecting a track from search results
-  const selectTrack = (track) => {
-    initializeStartingNode(track);
+
+
+
+  
+  const selectTrack = async (track) => {
+    await initializeStartingNode(track);
   };
 
-  // Function to get audio features for a given track
+
+
   const getFeatures = async (trackId) => {
     try {
       const response = await fetch(`/api/audio-features?trackID=${trackId}`, {
