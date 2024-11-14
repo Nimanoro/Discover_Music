@@ -115,7 +115,7 @@ const ExplorePath = () => {
     };
   
     // Add node to the global nodes array
-    setNodes((prevNodes) => [...prevNodes, node]);
+    setUserPath((prevNodes) => [...prevNodes, node]);
   
     return node;
   };
