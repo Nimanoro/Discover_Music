@@ -9,6 +9,7 @@ const ExplorePath = () => {
   const [loading, setLoading] = useState(false); // New loading state
 
   // Function to handle search for the starting song
+
   const searchTracks = async () => {
     try {
       setLoading(true); // Set loading to true before starting the fetch
@@ -33,7 +34,7 @@ const ExplorePath = () => {
   // Function to get audio features for a given track
   const getFeatures = async (trackId) => {
     try {
-      const response = await fetch(`/api/audio-features?trackId=${trackId}`, {
+      const response = await fetch(`/api/audio-features?trackID=${trackId}`, {
         credentials: 'include',
       });
       const data = await response.json();
