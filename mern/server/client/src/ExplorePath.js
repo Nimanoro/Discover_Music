@@ -7,7 +7,7 @@ const ExplorePath = () => {
   const [currentNode, setCurrentNode] = useState(null);
   const [userPath, setUserPath] = useState([]);
   const [loading, setLoading] = useState(false); // New loading state
-
+  const [currentNodeFeatures, setCurrentNodeFeatures] = useState(null);
   // Function to handle search for the starting song
 
   const searchTracks = async () => {
@@ -48,6 +48,7 @@ const ExplorePath = () => {
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
     const trackFeatures = await getFeatures(track.id); // Fetch features
+    setCurrentNodeFeatures(trackFeatures);
     const startingNode = {
       id: track.id,
       type: "song",
@@ -64,13 +65,19 @@ const ExplorePath = () => {
 
   // Fetch recommendations for the given node to populate next options
   const fetchNextOptions = async (node) => {
+
     try {
-      const response = await fetch(`/api/recommendations`, {
+      const response = await fetch(`/api/pathrecommendations`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seedTrack: node.id }),
-        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ trackFeatures, seedTrack: node.id }),
+        credentials: 'include'
       });
+      if (!response.ok) {
+        throw new Error('Failed to fetch recommendations');
+      }
       const data = await response.json();
 
       const nextNodes = data.tracks.map((track) => ({
@@ -79,11 +86,6 @@ const ExplorePath = () => {
         name: track.name,
         artists: track.artists.map((artist) => artist.name),
         image: track.album.images[0]?.url || "default_image_url",
-        attributes: {
-          energy: track.energy,
-          tempo: track.tempo,
-          valence: track.valence,
-        }
       }));
       setCurrentNode({ ...node, nextOptions: nextNodes });
     } catch (error) {

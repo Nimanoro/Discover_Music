@@ -13,6 +13,7 @@ const dbo = require("./db/conn");
 const userRouter = require('./routes/User');
 const searchRouter = require('./routes/Search');
 const recommendationsPremRouter = require('./routes/Spotify_reccomendationsPrem');
+const pathrecommendations = require('./routes/Path_reccomendations.js')
 const dotenv = require('dotenv');
 var cookieParser = require('cookie-parser');
 const fileURLToPath = require('url');
@@ -43,6 +44,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/spotify', spotifyLogin);
+app.use(pathrecommendations);
 app.use(recommendationsPremRouter);
 app.use(deleteRouter);
 app.use(userRouter); 
