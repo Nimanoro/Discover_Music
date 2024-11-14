@@ -79,7 +79,7 @@ const ExplorePath = () => {
       node.features = getFeatures(node.id);
     }
     console.log("node:", node);
-    console.print("pathrecom body", node.features, node.id);
+    console.log("pathrecom body", node.features, node.id);
     try {
       const response = await fetch(`/api/pathrecommendations`, {
         method: 'POST',
