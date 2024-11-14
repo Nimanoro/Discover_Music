@@ -72,7 +72,7 @@ const ExplorePath = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ trackFeatures, seedTrack: node.id }),
+        body: JSON.stringify({ currentNodeFeatures, seedTrack: node.id }),
         credentials: 'include'
       });
       if (!response.ok) {
