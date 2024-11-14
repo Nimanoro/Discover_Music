@@ -126,10 +126,14 @@ const ExplorePath = () => {
     if (! node.features) {
       node.features = await getFeatures(node.id);
     }
+
+
     console.log("node:", node);
     console.log("pathrecom body", node.features, node.id);
     const songFeatures = node.features;
     const seedTrack = node.id;
+
+
     try {
       const response = await fetch(`/api/pathrecommendations`, {
         method: 'POST',
@@ -139,15 +143,11 @@ const ExplorePath = () => {
         body: JSON.stringify({songFeatures,  seedTrack}),
         credentials: 'include'
       });
-
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch recommendations');
-      }
       const data = await response.json();
-
       const nextNodes = data.tracks.map((track) => createNode(track, node));
+      console.log("next nodes:", nextNodes)
       setCurrentNode({ ...node, nextOptions: nextNodes });
+      console.log("node after next nodes:", node)
     } catch (error) {
       console.error('Error fetching recommendations:', error);
     }
