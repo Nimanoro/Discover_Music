@@ -39,10 +39,9 @@ const ExplorePath = () => {
       });
       const data = await response.json();
       await setCurrentNodeFeatures(data);
-      return data; // Return audio features for the given track
+      console.log("selected track features", currentNodeFeatures);
     } catch (error) {
       console.error('Error fetching audio features:', error);
-      return {}; // Return empty object on error
     }
   };
 
@@ -95,10 +94,10 @@ const ExplorePath = () => {
   };
 
   // Select a node as the next step in the journey
-  const selectNode = (node) => {
-    setUserPath([...userPath, node]); // Add selected node to path
-    setCurrentNode(node); // Set it as current node
-    fetchNextOptions(node); // Fetch recommendations for the new current node
+  const selectNode = async (node) => {
+    await setUserPath([...userPath, node]); // Add selected node to path
+    await setCurrentNode(node); // Set it as current node
+    await fetchNextOptions(node); // Fetch recommendations for the new current node
   };
 
   return (
