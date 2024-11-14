@@ -38,6 +38,7 @@ const ExplorePath = () => {
         credentials: 'include',
       });
       const data = await response.json();
+      await setCurrentNodeFeatures(data);
       return data; // Return audio features for the given track
     } catch (error) {
       console.error('Error fetching audio features:', error);
@@ -48,7 +49,6 @@ const ExplorePath = () => {
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
     const trackFeatures = await getFeatures(track.id); // Fetch features
-    setCurrentNodeFeatures(trackFeatures);
     const startingNode = {
       id: track.id,
       type: "song",
@@ -58,8 +58,8 @@ const ExplorePath = () => {
       features: trackFeatures,
     };
 
-    setCurrentNode(startingNode); // Set current node
-    setUserPath([startingNode]); // Add starting node to user path history
+    await setCurrentNode(startingNode); // Set current node
+    await setUserPath([startingNode]); // Add starting node to user path history
     await fetchNextOptions(startingNode); // Fetch next options
   };
 
