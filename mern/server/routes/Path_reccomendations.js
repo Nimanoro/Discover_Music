@@ -43,7 +43,7 @@ router.post('/api/pathrecommendations', async (req, res) => {
   }
 
   try {
-    const url = `https://api.spotify.com/v1/recommendations?limit=30&seed_tracks=${seedTrack}&target_danceability=${songFeatures.danceability}&target_energy=${songFeatures.energy}&target_key=${songFeatures.key}&target_loudness=${songFeatures.loudness}&target_mode=${songFeatures.mode}&target_speechiness=${songFeatures.speechiness}&target_acousticness=${songFeatures.acousticness}&target_instrumentalness=${songFeatures.instrumentalness}&target_liveness=${songFeatures.liveness}&target_valence=${songFeatures.valence}&target_tempo=${songFeatures.tempo}`;
+    const url = `https://api.spotify.com/v1/recommendations?limit=4&seed_tracks=${seedTrack}&target_danceability=${songFeatures.danceability}&target_energy=${songFeatures.energy}&target_key=${songFeatures.key}&target_loudness=${songFeatures.loudness}&target_mode=${songFeatures.mode}&target_speechiness=${songFeatures.speechiness}&target_acousticness=${songFeatures.acousticness}&target_instrumentalness=${songFeatures.instrumentalness}&target_liveness=${songFeatures.liveness}&target_valence=${songFeatures.valence}&target_tempo=${songFeatures.tempo}`;
 
     console.log('Request URL:', url);
 

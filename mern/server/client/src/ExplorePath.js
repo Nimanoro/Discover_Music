@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Playlist/quiz.css';
+import './Playlist/path.css';
 
 const ExplorePath = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -8,6 +8,7 @@ const ExplorePath = () => {
   const [userPath, setUserPath] = useState([]);
   const [loading, setLoading] = useState(false);
   const [songFeatures, setSongFeatures] = useState(null);
+  const [rootNode, setRootNode] = useState(null); // To track the root of the tree
 
 
   const searchTracks = async () => {
@@ -55,6 +56,30 @@ const ExplorePath = () => {
     }
   };
 
+  const TreeNode = ({ node, onSelect }) => {
+    return (
+      <div className="tree-node">
+        <div
+          className={`node ${node.isActive ? "active" : ""}`}
+          onClick={() => onSelect(node)}
+        >
+          <img src={node.image} alt={node.name} width="50" />
+          <p>{node.name}</p>
+          <p>{node.artists.join(", ")}</p>
+        </div>
+  
+        {node.nextOptions && node.nextOptions.length > 0 && (
+          <div className="child-nodes">
+            {node.nextOptions.map((childNode) => (
+              <TreeNode key={childNode.id} node={childNode} onSelect={onSelect} />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+  
+  
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
     await getFeatures(track.id);
@@ -66,13 +91,36 @@ const ExplorePath = () => {
       artists: track.artists.map((artist) => artist.name),
       image: track.album.images[0]?.url || "default_image_url",
       features: songFeatures,
-    };
+      isActive: true, // Mark root node as active initially
 
+    };
+    await setRootNode(startingNode);
     await setCurrentNode(startingNode); // Set current node
     await setUserPath([startingNode]); // Add starting node to user path history
     await fetchNextOptions(startingNode); // Fetch next options
   };
 
+
+  const createNode = (track, parent) => {
+    const node = {
+      id: track.id,
+      type: "song",
+      name: track.name,
+      artists: track.artists.map((artist) => artist.name),
+      image: track.album.images[0]?.url || "default_image_url",
+      features: null,
+      parent: parent,
+      nextOptions: [], // Placeholder for children
+      isActive: false, // Field to track active state
+    };
+  
+    // Add node to the global nodes array
+    setNodes((prevNodes) => [...prevNodes, node]);
+  
+    return node;
+  };
+  
+  
   // Fetch recommendations for the given node to populate next options
   const fetchNextOptions = async (node) => {
     if (! node.features) {
@@ -96,13 +144,7 @@ const ExplorePath = () => {
       }
       const data = await response.json();
 
-      const nextNodes = data.tracks.map((track) => ({
-        id: track.id,
-        type: "song",
-        name: track.name,
-        artists: track.artists.map((artist) => artist.name),
-        image: track.album.images[0]?.url || "default_image_url",
-      }));
+      const nextNodes = data.tracks.map((track) => createNode(track, node));
       setCurrentNode({ ...node, nextOptions: nextNodes });
     } catch (error) {
       console.error('Error fetching recommendations:', error);
@@ -111,6 +153,20 @@ const ExplorePath = () => {
 
   // Select a node as the next step in the journey
   const selectNode = async (node) => {
+      // Deactivate siblings
+    if (node.parent) {
+      node.parent.nextOptions.forEach((sibling) => (sibling.isActive = false));
+    }
+  
+    // Mark the selected node as active
+    node.isActive = true;
+  
+    // Add the selected node to the user path
+    setUserPath([...userPath, node]);
+  
+    // Set the selected node as the current node
+    setCurrentNode(node);
+    
     await setUserPath([...userPath, node]);
     await setCurrentNode(node); 
     await fetchNextOptions(node);
@@ -119,7 +175,7 @@ const ExplorePath = () => {
   return (
     <div>
       <h2>Start Your Music Journey</h2>
-      {!currentNode ? (
+      {!rootNode ? (
         <div>
           <input
             className='h-11 rounded text-black border border-gray-400 focus:outline-none focus:border-blue-500 px-3 py-1 mb-3'
@@ -130,42 +186,29 @@ const ExplorePath = () => {
           />
           <button onClick={searchTracks}>Search</button>
           {loading ? (
-            <p>Loading...</p> // Display loading message while fetching data
+            <p>Loading...</p>
           ) : (
             <ul>
-            {searchResults.map((track) => (
-              <li key={track.id} onClick={() => selectTrack(track)}>
-                {track.album && track.album.images && track.album.images.length > 0 ? (
-                  <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
-                ) : (
-                  <img src="default_image_url" alt="Default" width="50" height="50" />
-                )}
-                {track.name} by {track.artists.map(artist => artist.name).join(', ')}
-              </li>
-            ))}
-          </ul>
+              {searchResults.map((track) => (
+                <li key={track.id} onClick={() => selectTrack(track)}>
+                  {track.album && track.album.images && track.album.images.length > 0 ? (
+                    <img src={track.album.images[0].url} alt={track.name} width="50" height="50" />
+                  ) : (
+                    <img src="default_image_url" alt="Default" width="50" height="50" />
+                  )}
+                  {track.name} by {track.artists.map(artist => artist.name).join(', ')}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       ) : (
-        <div>
-          <h3>{currentNode.name} by {currentNode.artists.join(', ')}</h3>
-          <img src={currentNode.image} alt={currentNode.name} width="100" />
-          <h4>Choose Your Next Stop:</h4>
-          <ul>
-            {currentNode.nextOptions && currentNode.nextOptions.length > 0 ? (
-              currentNode.nextOptions.map((option) => (
-                <li key={option.id} onClick={() => selectNode(option)}>
-                  {option.name} by {option.artists.join(', ')}
-                </li>
-              ))
-            ) : (
-              <li>No next options available.</li>
-            )}
-          </ul>
+        <div className="tree-container">
+          <TreeNode node={rootNode} onSelect={selectNode} /> {/* Always start rendering from root */}
         </div>
       )}
     </div>
   );
-};
+}  
 
 export default ExplorePath;

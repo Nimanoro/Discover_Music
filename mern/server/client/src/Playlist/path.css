@@ -1,0 +1,34 @@
+.tree-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  
+  .tree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    position: relative;
+  }
+  
+  .tree-node .node {
+    cursor: pointer;
+    padding: 10px;
+    background-color: lightgray;
+    border-radius: 50%;
+    text-align: center;
+  }
+  
+  .tree-node .node.active {
+    border: 2px solid blue;
+    background-color: lightblue;
+  }
+  
+  .child-nodes {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
