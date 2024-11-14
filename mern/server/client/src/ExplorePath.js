@@ -128,15 +128,15 @@ const ExplorePath = () => {
     }
     console.log("node:", node);
     console.log("pathrecom body", node.features, node.id);
-    const features = node.features;
-    const trackID = node.id;
+    const songFeatures = node.features;
+    const seedTrack = node.id;
     try {
       const response = await fetch(`/api/pathrecommendations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({features, trackID}),
+        body: JSON.stringify({songFeatures,  seedTrack}),
         credentials: 'include'
       });
 
