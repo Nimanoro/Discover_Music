@@ -7,7 +7,7 @@ const dbo = require('../db/conn');
 // Endpoint to get recommendations
 console.log('path rec LOADED ')
 router.post('/api/pathrecommendations', async (req, res) => {
-  const {currentNodeFeatures: songFeatures, seedTrack: seedTrack} = req.body;
+  const {songFeatures, seedTrack: seedTrack} = req.body;
   console.log('Song features:', songFeatures);
   console.log('Seed Track:', seedTrack);
 
