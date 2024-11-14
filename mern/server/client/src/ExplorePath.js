@@ -20,7 +20,7 @@ const ExplorePath = () => {
       });
       const data = await response.json();
       console.log("API Response:", data); // Debugging: Check API response
-      setSearchResults(data); // Update state with search results
+      await setSearchResults(data); // Update state with search results
     } catch (error) {
       console.error('Error searching tracks:', error);
     } finally {
