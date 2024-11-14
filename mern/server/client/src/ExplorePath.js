@@ -91,6 +91,7 @@ const ExplorePath = () => {
       artists: track.artists.map((artist) => artist.name),
       image: track.album.images[0]?.url || "default_image_url",
       features: songFeatures,
+      nextOptions: [], // Placeholder for children
       isActive: true, // Mark root node as active initially
 
     };
@@ -109,7 +110,6 @@ const ExplorePath = () => {
       artists: track.artists.map((artist) => artist.name),
       image: track.album.images[0]?.url || "default_image_url",
       features: null,
-      parent: parent,
       nextOptions: [], // Placeholder for children
       isActive: false, // Field to track active state
     };
