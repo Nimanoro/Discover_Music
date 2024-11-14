@@ -106,7 +106,7 @@ const ExplorePath = () => {
       image: track.album.images[0]?.url || "default_image_url",
       features: null,
       nextOptions: [], // Placeholder for children
-      isActive: false, // Field to track active state
+      isActive: true, // Field to track active state
       parent: parent,
     };
   
@@ -142,6 +142,7 @@ const ExplorePath = () => {
       const data = await response.json();
       const nextNodes = data.tracks.filter((track) => track.id !== node.id).map((track) => createNode(track, node));      
       console.log("next nodes:", nextNodes);
+      node.isActive = false;
       node.nextOptions = nextNodes;
       console.log("node after next nodes:", node);
     } catch (error) {
