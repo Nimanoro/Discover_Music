@@ -76,7 +76,7 @@ const ExplorePath = () => {
   // Fetch recommendations for the given node to populate next options
   const fetchNextOptions = async (node) => {
     if (! node.features) {
-      node.features = getFeatures(node.id);
+      node.features = await getFeatures(node.id);
     }
     console.log("node:", node);
     console.log("pathrecom body", node.features, node.id);
