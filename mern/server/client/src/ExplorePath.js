@@ -45,7 +45,6 @@ const ExplorePath = () => {
         throw new Error('Failed to search tracks');
       }
       const data = await response.json();
-      console.log("selected track features", songFeatures);
       return data;
     } catch (error) {
       console.error('Error fetching audio features:', error);
