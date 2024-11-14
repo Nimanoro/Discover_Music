@@ -146,7 +146,7 @@ const ExplorePath = () => {
       const data = await response.json();
       const nextNodes = data.tracks.map((track) => createNode(track, node));
       console.log("next nodes:", nextNodes)
-      setCurrentNode({ ...node, nextOptions: nextNodes });
+      node.nextOptions = nextNodes;
       console.log("node after next nodes:", node)
     } catch (error) {
       console.error('Error fetching recommendations:', error);
