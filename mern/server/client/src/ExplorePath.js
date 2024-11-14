@@ -7,7 +7,6 @@ const ExplorePath = () => {
   const [currentNode, setCurrentNode] = useState(null);
   const [userPath, setUserPath] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [songFeatures, setSongFeatures] = useState(null);
   const [rootNode, setRootNode] = useState(null); // To track the root of the tree
 
 
@@ -46,8 +45,6 @@ const ExplorePath = () => {
         throw new Error('Failed to search tracks');
       }
       const data = await response.json();
-      await setSongFeatures(data);
-
       console.log("selected track features", songFeatures);
       return data;
     } catch (error) {
@@ -82,15 +79,13 @@ const ExplorePath = () => {
   
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
-    await getFeatures(track.id);
-    console.log("selected track features", songFeatures);
     const startingNode = {
       id: track.id,
       type: "song",
       name: track.name,
       artists: track.artists.map((artist) => artist.name),
       image: track.album.images[0]?.url || "default_image_url",
-      features: songFeatures,
+      features: null,
       nextOptions: [], // Placeholder for children
       isActive: true, // Mark root node as active initially
 
@@ -154,9 +149,7 @@ const ExplorePath = () => {
     }
   };
 
-  // Select a node as the next step in the journey
   const selectNode = async (node) => {
-      // Deactivate siblings
     if (node.parent) {
       node.parent.nextOptions.forEach((sibling) => (sibling.isActive = false));
     }
