@@ -48,14 +48,13 @@ const ExplorePath = () => {
 
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
   const initializeStartingNode = async (track) => {
-    const trackFeatures = await getFeatures(track.id); // Fetch features
     const startingNode = {
       id: track.id,
       type: "song",
       name: track.name,
       artists: track.artists.map((artist) => artist.name),
       image: track.album.images[0]?.url || "default_image_url",
-      features: trackFeatures,
+      features: currentNodeFeatures,
     };
 
     await setCurrentNode(startingNode); // Set current node
@@ -65,7 +64,9 @@ const ExplorePath = () => {
 
   // Fetch recommendations for the given node to populate next options
   const fetchNextOptions = async (node) => {
-
+    if (! currentNodeFeatures) {
+      await getFeatures(node.id);
+    }
     try {
       const response = await fetch(`/api/pathrecommendations`, {
         method: 'POST',
