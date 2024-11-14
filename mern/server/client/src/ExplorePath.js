@@ -112,6 +112,7 @@ const ExplorePath = () => {
       features: null,
       nextOptions: [], // Placeholder for children
       isActive: false, // Field to track active state
+      parent: parent,
     };
   
     // Add node to the global nodes array
