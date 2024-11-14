@@ -58,10 +58,10 @@ const ExplorePath = () => {
         <div
           className={`node ${node.isActive ? "active" : ""}`}
           onClick={() => onSelect(node)}
+          style={{ pointerEvents: node.isActive ? 'auto' : 'none' }} // Disable clicks if node is inactive
         >
-          <img src={node.image} alt={node.name} width="50" />
+          <img src={node.image} alt={node.name} style={{ width: '60px', height: '60px', borderRadius: '50%' }} />
           <p>{node.name}</p>
-          <p>{node.artists.join(", ")}</p>
         </div>
   
         {node.nextOptions && node.nextOptions.length > 0 && (
@@ -74,6 +74,7 @@ const ExplorePath = () => {
       </div>
     );
   };
+  
   
   
   // **INITIALIZATION FUNCTION**: Called when user selects a starting song
@@ -105,7 +106,7 @@ const ExplorePath = () => {
       image: track.album.images[0]?.url || "default_image_url",
       features: null,
       nextOptions: [], // Placeholder for children
-      isActive: false, // Field to track active state
+      isActive: true, // Field to track active state
       parent: parent,
     };
   
@@ -139,10 +140,10 @@ const ExplorePath = () => {
         credentials: 'include'
       });
       const data = await response.json();
-      const nextNodes = data.tracks.map((track) => createNode(track, node));
-      console.log("next nodes:", nextNodes)
+      const nextNodes = data.tracks.filter((track) => track.id !== node.id).map((track) => createNode(track, node));      
+      console.log("next nodes:", nextNodes);
       node.nextOptions = nextNodes;
-      console.log("node after next nodes:", node)
+      console.log("node after next nodes:", node);
     } catch (error) {
       console.error('Error fetching recommendations:', error);
     }

@@ -1,34 +1,41 @@
 .tree-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  
-  .tree-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px;
-    position: relative;
-  }
-  
-  .tree-node .node {
-    cursor: pointer;
-    padding: 10px;
-    background-color: lightgray;
-    border-radius: 50%;
-    text-align: center;
-  }
-  
-  .tree-node .node.active {
-    border: 2px solid blue;
-    background-color: lightblue;
-  }
-  
-  .child-nodes {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  position: relative;
+}
+
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  position: relative;
+}
+
+.child-nodes {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  position: relative;
+}
+
+.node {
+  cursor: pointer;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 50%;
+  text-align: center;
+  border: 1px solid #ccc;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.node.active {
+  border: 2px solid blue;
+  background-color: lightblue;
+}
