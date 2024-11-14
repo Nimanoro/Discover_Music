@@ -139,6 +139,8 @@ const ExplorePath = () => {
         body: JSON.stringify({features, trackID}),
         credentials: 'include'
       });
+
+      
       if (!response.ok) {
         throw new Error('Failed to fetch recommendations');
       }
