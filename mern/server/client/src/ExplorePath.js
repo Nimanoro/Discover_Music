@@ -106,7 +106,7 @@ const ExplorePath = () => {
       image: track.album.images[0]?.url || "default_image_url",
       features: null,
       nextOptions: [], // Placeholder for children
-      isActive: true, // Field to track active state
+      isActive: false, // Field to track active state
       parent: parent,
     };
   
